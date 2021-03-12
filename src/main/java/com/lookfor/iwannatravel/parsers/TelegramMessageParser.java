@@ -22,10 +22,17 @@ public class TelegramMessageParser extends Thread {
         if (commandHandler == null) {
             return;
         }
+
+        Message message = update.hasMessage() ?
+                update.getMessage() : update.hasEditedMessage() ?
+                update.getEditedMessage() : null;
+        if (message == null) {
+            return;
+        }
+
         try {
             PartialBotApiMethod<?> method = commandHandler.doParse(update);
             if (method instanceof SendMessage) {
-                Message message = update.getMessage();
                 log.info(String.format(
                         "To @%s (%s): '%s'", message.getFrom().getUserName(), message.getChatId(), ((SendMessage) method).getText())
                 );

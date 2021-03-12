@@ -2,7 +2,6 @@ package com.lookfor.iwannatravel.config;
 
 import com.lookfor.iwannatravel.handlers.CommandHandler;
 import com.lookfor.iwannatravel.handlers.commands.GreetingCommand;
-import com.lookfor.iwannatravel.models.User;
 import com.lookfor.iwannatravel.parsers.TelegramMessageParser;
 import com.lookfor.iwannatravel.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 import java.util.Collections;
 
@@ -40,47 +40,32 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        Message message = update.getMessage();
+        boolean editedMessage = update.hasEditedMessage();
+        if (!update.hasMessage() && !editedMessage) {
+            return;
+        }
+        Message message = editedMessage ? update.getEditedMessage() : update.getMessage();
+        User user = message.getFrom();
         String messageText = message.getText();
-        // TODO: check for edited messages
+
         if (messageText == null || messageText.equals("")) {
             return;
         }
 
-        // Get existing user or create a new one
-        User user = checkUserInfo(message);
+        // Update user's info
+        userService.saveUpdates(message);
 
-        // TODO: detect the command that was sent via command handlers
         log.info(String.format(
-                "From @%s (%s): '%s'", user.getUsername(), user.getTelegramUserId(), messageText)
+                "From @%s (%s): '%s'", user.getUserName(), user.getId(), messageText)
         );
+        // TODO: detect the command that was sent via command handlers
 
         // TODO: remove hardcode with GreetingCommand bean
         CommandHandler<?> commandHandler = appContext.getBean(GreetingCommand.class);
-        TelegramMessageParser parser = new TelegramMessageParser(this, update, commandHandler);
+        TelegramMessageParser parser =
+                new TelegramMessageParser(this, update, commandHandler);
 
         // Start thread for parsing sent message
         parser.start();
-    }
-
-    private User checkUserInfo(Message message) {
-        String username = message.getFrom().getUserName();
-        if (username == null) {
-            username = message.getFrom().getFirstName();
-        }
-
-        Integer userId = message.getFrom().getId();
-        User user = userService.fetchByTelegramUserId(userId);
-
-        if (user == null) {
-            user = User.builder()
-                    .telegramUserId(userId)
-                    .username(username)
-                    .countries(Collections.emptySet())
-                    .build();
-            userService.save(user);
-        }
-
-        return user;
     }
 }

@@ -11,7 +11,7 @@ public class GreetingCommand implements CommandHandler<SendMessage> {
 
     @Override
     public SendMessage doParse(Update update) {
-        Message message = update.getMessage();
+        Message message = getReceivedMessage(update);
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(message.getChatId()));
         sendMessage.setText(
