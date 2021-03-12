@@ -32,6 +32,7 @@ public class OneToTripParser implements Parser {
 
     @Override
     public Future<ParserDto> getResult() {
+        log.info("OneToTripParser parser started...");
         CompletableFuture<ParserDto> completableFuture = new CompletableFuture<>();
 
         try {
@@ -42,17 +43,31 @@ public class OneToTripParser implements Parser {
 
             completableFuture.complete(dto);
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("OneToTripParser parser: " + e.getMessage());
+        } finally {
+            log.info("OneToTripParser parser has finished working");
         }
 
         return completableFuture;
     }
 
+    /**
+     * Get information about the last data update
+     *
+     * @param doc Jsoup document
+     * @return date of last update
+     */
     private Date getDate(Document doc) {
         String lastUpdate = doc.select("article header time").text();
         return stringToDate(lastUpdate);
     }
 
+    /**
+     * Page data parser
+     *
+     * @param doc Jsoup document
+     * @return list of CountryDto
+     */
     private List<CountryDto> parseCountries(Document doc) {
         List<CountryDto> list = new ArrayList<>();
         Elements section = doc.select("section");
@@ -91,7 +106,7 @@ public class OneToTripParser implements Parser {
                             case DOCUMENTS -> dto.setDocuments(propValue.trim());
                             case QUARANTINE -> {
                                 dto.setQuarantine(true);
-                                System.out.println(c.text());
+                                // System.out.println(c.text());
 
                                 if (propValue.isBlank()) {
                                     propValue = p.nextSibling().toString();
@@ -108,7 +123,7 @@ public class OneToTripParser implements Parser {
                     });
                 }
 
-                System.out.println(c.text() + ": " + current);
+                // System.out.println(c.text() + ": " + current);
                 current = current.nextElementSibling();
             }
 
@@ -120,6 +135,12 @@ public class OneToTripParser implements Parser {
         return list;
     }
 
+    /**
+     * Convert string date to Date object
+     *
+     * @param str date in string format
+     * @return Date object
+     */
     private Date stringToDate(String str) {
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd.MM.yyyy");
         Date date = null;

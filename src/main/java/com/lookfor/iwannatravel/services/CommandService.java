@@ -10,7 +10,7 @@ public interface CommandService {
      * Find a command name from message
      *
      * @param message received text message
-     * @return Command to manage
+     * @return command to manage
      */
     Command findCommandInMessage(String message);
 }

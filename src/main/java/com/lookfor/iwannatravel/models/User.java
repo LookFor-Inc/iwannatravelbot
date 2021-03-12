@@ -8,10 +8,10 @@ import java.util.Set;
 /**
  * User entity
  */
-@Builder
 @Getter
 @Setter
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
