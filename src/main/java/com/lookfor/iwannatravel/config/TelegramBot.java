@@ -45,18 +45,14 @@ public class TelegramBot extends TelegramLongPollingBot {
             return;
         }
         Message message = editedMessage ? update.getEditedMessage() : update.getMessage();
-        User user = message.getFrom();
         String messageText = message.getText();
 
-        if (messageText == null || messageText.equals("")) {
+        if (messageText.isEmpty()) {
             return;
         }
 
         // Update user's info
         userService.saveUpdates(message);
-        log.info(String.format(
-                "From @%s (%s): '%s'", user.getUserName(), user.getId(), messageText)
-        );
 
         Command command = commandService.findCommandInMessage(messageText);
         if (command == null) {

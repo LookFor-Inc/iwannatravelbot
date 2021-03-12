@@ -14,7 +14,7 @@ public class CommandServiceImpl implements CommandService {
     @Override
     public Command findCommandInMessage(String message) {
         String textCmd = getCommandFromString(message);
-        if (textCmd.equals("")) {
+        if (textCmd.isEmpty()) {
             return null;
         }
         Command cmd = Command.getByName(textCmd);
