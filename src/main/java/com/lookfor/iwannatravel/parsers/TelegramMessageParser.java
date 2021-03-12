@@ -1,7 +1,7 @@
 package com.lookfor.iwannatravel.parsers;
 
+import com.lookfor.iwannatravel.interfaces.RootCommandHandler;
 import com.lookfor.iwannatravel.config.TelegramBot;
-import com.lookfor.iwannatravel.handlers.CommandHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -15,11 +15,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class TelegramMessageParser extends Thread {
     private final TelegramBot telegramBot;
     private final Update update;
-    private final CommandHandler<?> commandHandler;
+    private final RootCommandHandler<?> rootCommandHandler;
 
     @Override
     public void run() {
-        if (commandHandler == null) {
+        if (rootCommandHandler == null) {
             return;
         }
 
@@ -31,7 +31,7 @@ public class TelegramMessageParser extends Thread {
         }
 
         try {
-            PartialBotApiMethod<?> method = commandHandler.doParse(update);
+            PartialBotApiMethod<?> method = rootCommandHandler.doParse(update);
             if (method instanceof SendMessage) {
                 log.info(String.format(
                         "To @%s (%s): '%s'", message.getFrom().getUserName(), message.getChatId(), ((SendMessage) method).getText())

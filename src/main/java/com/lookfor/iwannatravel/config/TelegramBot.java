@@ -1,8 +1,9 @@
 package com.lookfor.iwannatravel.config;
 
-import com.lookfor.iwannatravel.handlers.CommandHandler;
-import com.lookfor.iwannatravel.handlers.commands.GreetingCommand;
+import com.lookfor.iwannatravel.bot.Command;
+import com.lookfor.iwannatravel.interfaces.RootCommandHandler;
 import com.lookfor.iwannatravel.parsers.TelegramMessageParser;
+import com.lookfor.iwannatravel.services.CommandService;
 import com.lookfor.iwannatravel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +14,6 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
-
-import java.util.Collections;
 
 @Slf4j
 @Component
@@ -27,6 +26,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final ApplicationContext appContext;
 
     private final UserService userService;
+    private final CommandService commandService;
 
     @Override
     public String getBotUsername() {
@@ -54,16 +54,19 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         // Update user's info
         userService.saveUpdates(message);
-
         log.info(String.format(
                 "From @%s (%s): '%s'", user.getUserName(), user.getId(), messageText)
         );
-        // TODO: detect the command that was sent via command handlers
 
-        // TODO: remove hardcode with GreetingCommand bean
-        CommandHandler<?> commandHandler = appContext.getBean(GreetingCommand.class);
-        TelegramMessageParser parser =
-                new TelegramMessageParser(this, update, commandHandler);
+        Command command = commandService.findCommandInMessage(messageText);
+        if (command == null) {
+            return;
+        }
+        TelegramMessageParser parser = new TelegramMessageParser(
+                this,
+                update,
+                (RootCommandHandler<?>) appContext.getBean(command.getHandlerBeanName())
+        );
 
         // Start thread for parsing sent message
         parser.start();

@@ -1,14 +1,13 @@
-package com.lookfor.iwannatravel.handlers.commands;
+package com.lookfor.iwannatravel.bot.handlers;
 
-import com.lookfor.iwannatravel.handlers.CommandHandler;
+import com.lookfor.iwannatravel.interfaces.RootCommandHandler;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public class GreetingCommand implements CommandHandler<SendMessage> {
-
+public class GreetingCommandHandler implements RootCommandHandler<SendMessage> {
     @Override
     public SendMessage doParse(Update update) {
         Message message = getReceivedMessage(update);

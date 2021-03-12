@@ -1,10 +1,15 @@
-package com.lookfor.iwannatravel.handlers;
+package com.lookfor.iwannatravel.interfaces;
 
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public interface CommandHandler<T extends PartialBotApiMethod<?>> {
+/**
+ * Parent (root) handler interface
+ *
+ * @param <T> type of message to send
+ */
+public interface RootCommandHandler<T extends PartialBotApiMethod<?>> {
     /**
      * Execute a concrete command
      *
