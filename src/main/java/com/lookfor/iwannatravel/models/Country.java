@@ -38,9 +38,11 @@ public class Country implements Comparable<CountryDto> {
     @Column
     private Integer quarantineDays;
 
+    @Lob
     @Column
     private String quarantineNote;
 
+    @Lob
     @Column
     private String note;
 
