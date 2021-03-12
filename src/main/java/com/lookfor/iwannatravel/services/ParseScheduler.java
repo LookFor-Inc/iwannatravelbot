@@ -26,7 +26,7 @@ public class ParseScheduler {
      * @throws ExecutionException exp
      * @throws InterruptedException exp
      */
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0 0/1 1/1 * ?")
     @ManagedOperation(description = "Parse web page for traveling restrictions")
     public void parseWebPage() throws ExecutionException, InterruptedException {
         ParserDto data = oneToTripParser.getResult().get();
