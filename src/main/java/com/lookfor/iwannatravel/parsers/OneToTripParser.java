@@ -2,7 +2,8 @@ package com.lookfor.iwannatravel.parsers;
 
 import com.lookfor.iwannatravel.dto.ParserDto;
 import com.lookfor.iwannatravel.dto.CountryDto;
-import com.lookfor.iwannatravel.interfaces.ConcreteCountryParser;
+import com.lookfor.iwannatravel.interfaces.RussianParser;
+import com.lookfor.iwannatravel.parsers.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,8 +13,6 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class OneToTripParser implements ConcreteCountryParser {
+public class OneToTripParser implements RussianParser {
     private static final String URL = "https://www.onetwotrip.com/ru/blog/journeys/countries-that-are-open-to-tourists-from-russia/";
     private static final String TOURISM = "Туристические поездки:";
     private static final String DOCUMENTS = "Дополнительные документы:";
@@ -59,7 +58,7 @@ public class OneToTripParser implements ConcreteCountryParser {
      */
     private Date getDate(Document doc) {
         String lastUpdate = doc.select("article header time").text();
-        return stringToDate(lastUpdate);
+        return DateUtils.stringToDate(lastUpdate);
     }
 
     /**
@@ -133,24 +132,5 @@ public class OneToTripParser implements ConcreteCountryParser {
         });
 
         return list;
-    }
-
-    /**
-     * Convert string date to Date object
-     *
-     * @param str date in string format
-     * @return Date object
-     */
-    private Date stringToDate(String str) {
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd.MM.yyyy");
-        Date date = null;
-
-        try {
-            date = inputFormat.parse(str);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return date;
     }
 }

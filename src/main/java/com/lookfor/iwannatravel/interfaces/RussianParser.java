@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.Async;
 import java.util.concurrent.Future;
 
 @Async
-public interface ConcreteCountryParser {
+public interface RussianParser {
     /**
      * Find all information about countries with or without restriction
      * for concrete country

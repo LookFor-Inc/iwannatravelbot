@@ -1,6 +1,6 @@
 package com.lookfor.iwannatravel.interfaces;
 
-import com.lookfor.iwannatravel.dto.AvailableCrossingRequest;
+import com.lookfor.iwannatravel.dto.CountryRequest;
 import com.lookfor.iwannatravel.dto.AvailableCrossingResponse;
 import org.springframework.scheduling.annotation.Async;
 
@@ -14,5 +14,5 @@ public interface AvailableCrossingParser {
      * @param request with the name of the country of departure
      * @return list of allowed countries
      */
-    Future<AvailableCrossingResponse> getResult(AvailableCrossingRequest request);
+    Future<AvailableCrossingResponse> getResult(CountryRequest request);
 }
