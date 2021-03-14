@@ -1,57 +1,34 @@
 package com.lookfor.iwannatravel.models;
 
-import com.lookfor.iwannatravel.dto.CountryDto;
 import lombok.*;
-import org.checkerframework.common.aliasing.qual.Unique;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import java.util.Set;
 
 /**
  * Country entity
  */
 @Getter
-@Setter
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "countries")
-public class Country implements Comparable<CountryDto> {
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
-    @Unique
-    private String name;
-
-    @Column
-    private Boolean tourism;
-
-    @Column
-    private String documents;
-
-    @Column
-    private Boolean quarantine;
-
-    @Column
-    private Integer quarantineDays;
-
-    @Lob
-    @Column
-    private String quarantineNote;
-
-    @Lob
-    @Column
-    private String note;
-
-    @Column
-    @ManyToMany(mappedBy = "countries")
-    private Set<User> users;
-
-    @Override
-    public int compareTo(CountryDto anotherCountry) {
-        return Boolean.compare(tourism, anotherCountry.isTourism());
-    }
+    private String ru;
+    private String ua;
+    private String be;
+    private String en;
+    private String es;
+    private String pt;
+    private String de;
+    private String fr;
+    private String it;
+    private String pl;
+    private String js;
+    private String lt;
+    private String lv;
+    private String cz;
 }

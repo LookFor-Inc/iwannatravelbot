@@ -1,15 +1,17 @@
 package com.lookfor.iwannatravel.bot;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+
+import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
+import static com.google.common.base.CaseFormat.LOWER_CAMEL;
 
 /**
  * Command enum
  */
 public enum Command {
     GREETING("start"),
-    HELP("help");
+    HELP("help"),
+    USER_COUNTRY("from");
 
     private final String cmd;
     private final String obj;
@@ -17,7 +19,7 @@ public enum Command {
 
     Command(String cmd) {
         this.cmd = cmd;
-        this.obj = name().toLowerCase();
+        this.obj = UPPER_UNDERSCORE.to(LOWER_CAMEL, name());
     }
 
     /**
