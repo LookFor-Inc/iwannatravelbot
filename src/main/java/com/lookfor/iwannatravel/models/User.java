@@ -23,7 +23,9 @@ public class User {
     @Column
     private String username;
 
-    @Column
-    @ManyToMany
-    private Set<Country> countries;
+    @ManyToOne
+    private TrackedCountry trackedCountry;
+
+    @ManyToOne
+    private Country country;
 }

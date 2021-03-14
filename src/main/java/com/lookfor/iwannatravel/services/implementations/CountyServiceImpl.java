@@ -44,9 +44,9 @@ public class CountyServiceImpl implements CountryService {
 
         Country newCountry = countryDto.toEntity();
 
-        if (userSubscriptions != null) {
+        /*if (userSubscriptions != null) {
             newCountry.setUsers(userSubscriptions);
-        }
+        }*/
 
         countryRepository.save(newCountry);
     }
@@ -58,6 +58,6 @@ public class CountyServiceImpl implements CountryService {
     }
 
     private boolean needUpdate(Country country, CountryDto countryDto) {
-        return country.compareTo(countryDto) != 0;
+        return false; // country.compareTo(countryDto) != 0;
     }
 }
