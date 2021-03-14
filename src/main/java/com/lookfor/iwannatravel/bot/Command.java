@@ -1,33 +1,36 @@
 package com.lookfor.iwannatravel.bot;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+
+import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
+import static com.google.common.base.CaseFormat.LOWER_CAMEL;
 
 /**
  * Command enum
  */
 public enum Command {
-    GREETING(new HashSet<>(Arrays.asList("hello", "hi", "привет")));
+    GREETING("start"),
+    HELP("help"),
+    USER_COUNTRY("from");
 
-    private final Set<String> set;
+    private final String cmd;
     private final String obj;
     private final String COMMAND_HANDLER = "CommandHandler";
 
-    Command(Set<String> set) {
-        this.set = set;
-        this.obj = name().toLowerCase();
+    Command(String cmd) {
+        this.cmd = cmd;
+        this.obj = UPPER_UNDERSCORE.to(LOWER_CAMEL, name());
     }
 
     /**
-     * Get the Command obj by its element of set
+     * Get the Command obj by its command name
      *
      * @param name to find
      * @return Command obj
      */
     public static Command getByName(String name) {
         return Arrays.stream(values())
-                .filter(cmdVal -> cmdVal.set.contains(name))
+                .filter(cmdVal -> cmdVal.cmd.equals(name))
                 .findFirst()
                 .orElse(null);
     }

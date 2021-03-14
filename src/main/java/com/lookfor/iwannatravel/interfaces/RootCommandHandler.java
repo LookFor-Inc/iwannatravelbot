@@ -15,12 +15,11 @@ public interface RootCommandHandler<T extends PartialBotApiMethod<?>> {
      *
      * @param update received updates
      * @return bot api method
-     * @throws Exception exp
      */
-    T doParse(Update update) throws Exception;
+    T doParse(Update update);
 
     /**
-     * Get message depending on whether it has been edited or not
+     * Get entire user's message
      *
      * @param update received updates
      * @return received message

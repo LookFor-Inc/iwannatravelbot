@@ -1,6 +1,8 @@
 package com.lookfor.iwannatravel.config;
 
 import com.lookfor.iwannatravel.bot.Command;
+import com.lookfor.iwannatravel.bot.handlers.IncorrectCommandHandler;
+import com.lookfor.iwannatravel.exceptions.CommandNotFoundException;
 import com.lookfor.iwannatravel.interfaces.RootCommandHandler;
 import com.lookfor.iwannatravel.parsers.TelegramMessageParser;
 import com.lookfor.iwannatravel.services.CommandService;
@@ -53,15 +55,16 @@ public class TelegramBot extends TelegramLongPollingBot {
         // Update user's info
         userService.saveUpdates(message);
 
-        Command command = commandService.findCommandInMessage(messageText);
-        if (command == null) {
-            return;
+        RootCommandHandler<?> handler;
+        try {
+            Command command = commandService.findCommandInMessage(messageText);
+            handler = (RootCommandHandler<?>) appContext.getBean(command.getHandlerBeanName());
+        } catch (CommandNotFoundException exp) {
+            handler = appContext.getBean(IncorrectCommandHandler.class);
         }
-        TelegramMessageParser parser = new TelegramMessageParser(
-                this,
-                update,
-                (RootCommandHandler<?>) appContext.getBean(command.getHandlerBeanName())
-        );
+
+        TelegramMessageParser parser =
+                new TelegramMessageParser(this, update, handler);
 
         // Start thread for parsing sent message
         parser.start();
