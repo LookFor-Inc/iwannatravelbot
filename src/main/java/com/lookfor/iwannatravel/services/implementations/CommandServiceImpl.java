@@ -1,6 +1,7 @@
 package com.lookfor.iwannatravel.services.implementations;
 
 import com.lookfor.iwannatravel.bot.Command;
+import com.lookfor.iwannatravel.exceptions.CommandNotFoundException;
 import com.lookfor.iwannatravel.services.CommandService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.regex.Pattern;
 @Service
 public class CommandServiceImpl implements CommandService {
     @Override
-    public Command findCommandInMessage(String message) {
+    public Command findCommandInMessage(String message) throws CommandNotFoundException {
         String textCmd = getCommandFromString(message);
         if (textCmd.isEmpty()) {
             return null;
@@ -22,6 +23,9 @@ public class CommandServiceImpl implements CommandService {
                 String.format("Command '%s' (%s) was found in message '%s'",
                         textCmd, cmd, message)
         );
+        if (cmd == null) {
+            throw new CommandNotFoundException(textCmd);
+        }
         return cmd;
     }
 
