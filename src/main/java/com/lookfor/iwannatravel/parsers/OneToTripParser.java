@@ -1,8 +1,8 @@
 package com.lookfor.iwannatravel.parsers;
 
 import com.lookfor.iwannatravel.dto.ParserDto;
-import com.lookfor.iwannatravel.interfaces.Parser;
 import com.lookfor.iwannatravel.dto.CountryDto;
+import com.lookfor.iwannatravel.interfaces.ConcreteCountryParser;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class OneToTripParser implements Parser {
+public class OneToTripParser implements ConcreteCountryParser {
     private static final String URL = "https://www.onetwotrip.com/ru/blog/journeys/countries-that-are-open-to-tourists-from-russia/";
     private static final String TOURISM = "Туристические поездки:";
     private static final String DOCUMENTS = "Дополнительные документы:";
