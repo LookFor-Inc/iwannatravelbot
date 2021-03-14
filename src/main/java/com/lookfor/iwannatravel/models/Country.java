@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Country entity
@@ -31,4 +32,14 @@ public class Country {
     private String lt;
     private String lv;
     private String cz;
+
+    @OneToMany(mappedBy = "country")
+    private Set<User> users;
+
+    @OneToOne
+    private TrackedCountry trackedCountryFrom;
+
+    @ManyToOne
+    private TrackedCountry trackedCountryTo;
+
 }
