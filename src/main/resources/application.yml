@@ -7,18 +7,12 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
-    show-sql: false
+    show-sql: true
     open-in-view: false
     hibernate:
       ddl-auto: update
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.xml
-
-hibernate:
-  cache:
-    use_second_level_cache: true
-  region:
-    factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
 
 telegram:
   bot:

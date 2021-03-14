@@ -1,7 +1,6 @@
 package com.lookfor.iwannatravel.models;
 
-import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import lombok.Getter;
 
 import javax.persistence.*;
 
@@ -11,8 +10,6 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "countries")
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
