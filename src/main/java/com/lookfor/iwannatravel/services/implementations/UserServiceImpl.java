@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
             user = User.builder()
                     .telegramUserId(userId)
                     .username(username)
-                    .countries(Collections.emptySet())
+                    // .countries(Collections.emptySet())
                     .build();
             save(user);
         }

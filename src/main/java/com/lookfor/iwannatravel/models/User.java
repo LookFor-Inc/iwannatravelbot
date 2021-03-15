@@ -17,13 +17,13 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
     @Id
-    @Column
     private Integer telegramUserId;
 
-    @Column
     private String username;
 
-    @Column
     @ManyToMany
-    private Set<Country> countries;
+    private Set<Trajectory> trajectories;
+
+    @ManyToOne
+    private Country country;
 }

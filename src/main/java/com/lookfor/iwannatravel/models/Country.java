@@ -3,6 +3,7 @@ package com.lookfor.iwannatravel.models;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Country entity
@@ -28,4 +29,13 @@ public class Country {
     private String lt;
     private String lv;
     private String cz;
+
+    @OneToMany(mappedBy = "country")
+    private Set<User> users;
+
+    @OneToMany(mappedBy = "departureCountry")
+    private Set<Trajectory> departureCountries;
+
+    @OneToMany(mappedBy = "arrivalCountry")
+    private Set<Trajectory> arrivalCountries;
 }
