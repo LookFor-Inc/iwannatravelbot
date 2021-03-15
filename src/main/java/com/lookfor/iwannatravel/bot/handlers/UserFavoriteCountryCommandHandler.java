@@ -1,6 +1,7 @@
 package com.lookfor.iwannatravel.bot.handlers;
 
 import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
+import com.lookfor.iwannatravel.exceptions.IncorrectRequestException;
 import com.lookfor.iwannatravel.exceptions.UserNotFoundException;
 import com.lookfor.iwannatravel.interfaces.RootCommandHandler;
 import com.lookfor.iwannatravel.services.UserService;
@@ -16,27 +17,23 @@ import static com.lookfor.iwannatravel.utils.TextMessageUtil.getRestOfTextMessag
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UserCountryCommandHandler implements RootCommandHandler<SendMessage> {
+public class UserFavoriteCountryCommandHandler implements RootCommandHandler<SendMessage> {
     private final UserService userService;
 
     @Override
     public SendMessage doParse(Update update) {
         Message message = getReceivedMessage(update);
         String restOfTextMessage = getRestOfTextMessageWithoutCommand(message.getText());
-        // TODO: delete all trajectories when save country
         String responseMessage;
         try {
-            userService.saveUserDepartureCountry(message.getFrom().getId(), restOfTextMessage);
+            userService.saveUserArrivalCountry(message.getFrom().getId(), restOfTextMessage);
             responseMessage = String.format(
-                    "Your country %s was saved!😎",
+                    "Country %s was saved to your favorites!👌",
                     restOfTextMessage.substring(0, 1).toUpperCase() + restOfTextMessage.substring(1)
             );
-        } catch (CountryNotFoundException | UserNotFoundException exp) {
+        } catch (CountryNotFoundException | UserNotFoundException | IncorrectRequestException exp) {
             log.error(exp.getMessage());
-            responseMessage = String.format(
-                    "Error in saving country %s",
-                    restOfTextMessage
-            );
+            responseMessage = String.format("Error in saving country %s", restOfTextMessage);
         }
         return SendMessage.builder()
                 .chatId(String.valueOf(message.getChatId()))

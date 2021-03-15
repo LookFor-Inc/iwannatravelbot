@@ -1,8 +1,12 @@
 package com.lookfor.iwannatravel.services;
 
-import com.lookfor.iwannatravel.models.Country;
+import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
+import com.lookfor.iwannatravel.exceptions.IncorrectRequestException;
+import com.lookfor.iwannatravel.exceptions.UserNotFoundException;
 import com.lookfor.iwannatravel.models.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.util.Optional;
 
 /**
  * Service interface for managing {@link com.lookfor.iwannatravel.models.User}
@@ -14,7 +18,7 @@ public interface UserService {
      * @param telegramUserId User's telegram id
      * @return persisted entity
      */
-    User fetchByTelegramUserId(Integer telegramUserId);
+    Optional<User> findByTelegramUserId(Integer telegramUserId);
 
     /**
      * Save a User
@@ -30,5 +34,19 @@ public interface UserService {
      */
     void saveUpdates(Message message);
 
-    void saveUserCountry(Integer userId, Country country);
+    /**
+     * Save user's departure country
+     *
+     * @param userId id of a user
+     * @param countryName user's Country name
+     */
+    void saveUserDepartureCountry(Integer userId, String countryName) throws CountryNotFoundException, UserNotFoundException;
+
+    /**
+     * Save user's arrival country
+     *
+     * @param userId id of a user
+     * @param countryName user's Country name
+     */
+    void saveUserArrivalCountry(Integer userId, String countryName) throws CountryNotFoundException, UserNotFoundException, IncorrectRequestException;
 }

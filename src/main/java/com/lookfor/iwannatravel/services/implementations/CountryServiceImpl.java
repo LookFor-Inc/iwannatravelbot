@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -24,14 +25,14 @@ public class CountryServiceImpl implements CountryService {
         countries = fetchAllCountries();
     }
 
-    @Cacheable("countries")
     @Override
+    @Cacheable("countries")
     public List<Country> fetchAllCountries() {
         return countryRepository.findAll();
     }
 
     @Override
-    public Country getCountryByName(String name) throws CountryNotFoundException {
+    public Optional<Country> findCountryByName(String name) {
         return countries.stream()
                 .filter(country ->
                         name.equals(country.getRu().toLowerCase()) ||
@@ -49,7 +50,6 @@ public class CountryServiceImpl implements CountryService {
                         name.equals(country.getLv().toLowerCase()) ||
                         name.equals(country.getCz().toLowerCase())
                 )
-                .findFirst()
-                .orElseThrow(() -> new CountryNotFoundException(name));
+                .findFirst();
     }
 }

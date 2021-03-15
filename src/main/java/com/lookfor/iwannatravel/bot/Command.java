@@ -11,7 +11,8 @@ import static com.google.common.base.CaseFormat.LOWER_CAMEL;
 public enum Command {
     GREETING("start"),
     HELP("help"),
-    USER_COUNTRY("from");
+    USER_COUNTRY("from"),
+    USER_FAVORITE_COUNTRY("to");
 
     private final String cmd;
     private final String obj;
