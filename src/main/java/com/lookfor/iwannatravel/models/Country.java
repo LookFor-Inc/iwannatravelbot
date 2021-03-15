@@ -11,7 +11,6 @@ import java.util.Set;
  */
 @Getter
 @Entity
-@Builder
 @Table(name = "countries")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
@@ -37,6 +36,9 @@ public class Country {
     @OneToMany(mappedBy = "country")
     private Set<User> users;
 
-    @OneToMany(mappedBy = "country")
-    private Set<Trajectory> trajectories;
+    @OneToMany(mappedBy = "departureCountry")
+    private Set<Trajectory> departureCountries;
+
+    @OneToMany(mappedBy = "arrivalCountry")
+    private Set<Trajectory> arrivalCountries;
 }

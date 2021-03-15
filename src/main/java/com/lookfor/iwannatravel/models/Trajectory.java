@@ -26,5 +26,8 @@ public class Trajectory {
     private Set<User> users;
 
     @ManyToOne
-    private Country country;
+    private Country departureCountry;
+
+    @ManyToOne
+    private Country arrivalCountry;
 }
