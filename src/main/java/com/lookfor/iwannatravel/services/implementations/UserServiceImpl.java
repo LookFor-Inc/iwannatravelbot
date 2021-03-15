@@ -1,11 +1,13 @@
 package com.lookfor.iwannatravel.services.implementations;
 
+import com.lookfor.iwannatravel.models.Country;
 import com.lookfor.iwannatravel.models.User;
 import com.lookfor.iwannatravel.repositories.UserRepository;
 import com.lookfor.iwannatravel.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Collections;
@@ -44,9 +46,17 @@ public class UserServiceImpl implements UserService {
             user = User.builder()
                     .telegramUserId(userId)
                     .username(username)
-                    // .countries(Collections.emptySet())
+                    .trajectories(Collections.emptySet())
+                    .country(null)
                     .build();
             save(user);
         }
+    }
+
+    @Override
+    @Transactional
+    public void saveUserCountry(Integer userId, Country country) {
+        User user = fetchByTelegramUserId(userId);
+        user.setCountry(country);
     }
 }

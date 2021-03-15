@@ -1,5 +1,6 @@
 package com.lookfor.iwannatravel.services;
 
+import com.lookfor.iwannatravel.models.Country;
 import com.lookfor.iwannatravel.models.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -28,4 +29,6 @@ public interface UserService {
      * @param message received Message
      */
     void saveUpdates(Message message);
+
+    void saveUserCountry(Integer userId, Country country);
 }
