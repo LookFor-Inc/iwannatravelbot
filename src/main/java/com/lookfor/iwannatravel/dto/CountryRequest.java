@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @AllArgsConstructor
-public class AvailableCrossingRequest {
+public class CountryRequest {
     @NotNull
-    private String fromCountry;
+    private String countryName;
 }
