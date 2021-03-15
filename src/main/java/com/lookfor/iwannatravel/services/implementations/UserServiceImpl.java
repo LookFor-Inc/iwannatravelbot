@@ -29,13 +29,13 @@ public class UserServiceImpl implements UserService {
     private final TrajectoryService trajectoryService;
 
     @Override
-    public Optional<User> findByTelegramUserId(Integer telegramUserId) {
-        return userRepository.findByTelegramUserId(telegramUserId);
+    public void save(User user) {
+        userRepository.save(user);
     }
 
     @Override
-    public void save(User user) {
-        userRepository.save(user);
+    public Optional<User> findByTelegramUserId(Integer telegramUserId) {
+        return userRepository.findByTelegramUserId(telegramUserId);
     }
 
     @Override

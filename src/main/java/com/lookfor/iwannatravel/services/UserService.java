@@ -13,19 +13,19 @@ import java.util.Optional;
  */
 public interface UserService {
     /**
+     * Save a User
+     *
+     * @param user entity to save
+     */
+    void save(User user);
+
+    /**
      * Fetch a User by his telegram id
      *
      * @param telegramUserId User's telegram id
      * @return persisted entity
      */
     Optional<User> findByTelegramUserId(Integer telegramUserId);
-
-    /**
-     * Save a User
-     *
-     * @param user entity to save
-     */
-    void save(User user);
 
     /**
      * Save User's updates or create a new one
