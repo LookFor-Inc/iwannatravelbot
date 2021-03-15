@@ -16,16 +16,4 @@ public class CountryDto {
     private int quarantineDays;
     private String quarantineNote;
     private String note;
-
-    public Country toEntity() {
-        return Country.builder()
-//                .name(name)
-//                .tourism(tourism)
-//                .documents(documents)
-//                .quarantine(quarantine)
-//                .quarantineDays(quarantineDays)
-//                .quarantineNote(quarantineNote)
-//                .note(note)
-                .build();
-    }
 }
