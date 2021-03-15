@@ -10,8 +10,8 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tracked_countries")
-public class TrackedCountry {
+@Table(name = "trajectories")
+public class Trajectory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,12 +22,9 @@ public class TrackedCountry {
     @Column
     private Boolean restricted;
 
-    @OneToOne(mappedBy = "trackedCountryFrom")
-    private Country countryFrom;
-
-    @OneToMany(mappedBy = "trackedCountryTo")
-    private Set<Country> countryTo;
-
-    @OneToMany(mappedBy = "trackedCountry")
+    @ManyToMany
     private Set<User> users;
+
+    @ManyToOne
+    private Country country;
 }

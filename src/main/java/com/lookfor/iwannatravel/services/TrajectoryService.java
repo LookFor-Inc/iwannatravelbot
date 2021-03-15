@@ -1,4 +1,4 @@
 package com.lookfor.iwannatravel.services;
 
-public interface TrackedCountryService {
+public interface TrajectoryService {
 }

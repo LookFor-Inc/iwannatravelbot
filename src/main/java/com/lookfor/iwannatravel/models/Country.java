@@ -36,10 +36,6 @@ public class Country {
     @OneToMany(mappedBy = "country")
     private Set<User> users;
 
-    @OneToOne
-    private TrackedCountry trackedCountryFrom;
-
-    @ManyToOne
-    private TrackedCountry trackedCountryTo;
-
+    @OneToMany(mappedBy = "country")
+    private Set<Trajectory> trajectories;
 }

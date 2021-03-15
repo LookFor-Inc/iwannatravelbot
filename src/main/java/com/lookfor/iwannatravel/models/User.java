@@ -3,6 +3,7 @@ package com.lookfor.iwannatravel.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * User entity
@@ -20,8 +21,8 @@ public class User {
 
     private String username;
 
-    @ManyToOne
-    private TrackedCountry trackedCountry;
+    @ManyToMany
+    private Set<Trajectory> trajectories;
 
     @ManyToOne
     private Country country;
