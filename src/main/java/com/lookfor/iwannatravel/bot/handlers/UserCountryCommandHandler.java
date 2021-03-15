@@ -1,5 +1,6 @@
 package com.lookfor.iwannatravel.bot.handlers;
 
+import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
 import com.lookfor.iwannatravel.interfaces.RootCommandHandler;
 import com.lookfor.iwannatravel.models.Country;
 import com.lookfor.iwannatravel.services.CountryService;
@@ -11,6 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 import static com.lookfor.iwannatravel.utils.TextMessageUtil.getRestOfTextMessageWithoutCommand;
 
@@ -24,14 +27,16 @@ public class UserCountryCommandHandler implements RootCommandHandler<SendMessage
     public SendMessage doParse(Update update) {
         Message message = getReceivedMessage(update);
         String restOfTextMessage = getRestOfTextMessageWithoutCommand(message.getText());
-        log.info(restOfTextMessage);
-        log.info(String.valueOf(message.getText()));
-        StringBuilder sb = new StringBuilder();
-        List<Country> countries = countryService.fetchAllCountries();
-        countries.forEach(c -> sb.append(c.getRu()).append("\n"));
+        // TODO: delete all trajectories when save country
+        Country country;
+        try {
+            country = countryService.getCountryByName(restOfTextMessage.toLowerCase());
+        } catch (CountryNotFoundException exp) {
+            log.error(exp.getMessage());
+        }
         return SendMessage.builder()
                 .chatId(String.valueOf(message.getChatId()))
-                .text(sb.toString())
+                .text("Saved")
                 .build();
     }
 }

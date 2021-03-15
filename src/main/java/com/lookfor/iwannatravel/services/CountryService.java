@@ -1,5 +1,6 @@
 package com.lookfor.iwannatravel.services;
 
+import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
 import com.lookfor.iwannatravel.models.Country;
 
 import java.util.List;
@@ -14,4 +15,12 @@ public interface CountryService {
      * @return list of countries
      */
     List<Country> fetchAllCountries();
+
+    /**
+     * Get Country by its name
+     *
+     * @param name of Country
+     * @return Country
+     */
+    Country getCountryByName(String name) throws CountryNotFoundException;
 }
