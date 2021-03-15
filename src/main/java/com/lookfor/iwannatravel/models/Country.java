@@ -11,6 +11,7 @@ import java.util.Set;
  */
 @Getter
 @Entity
+@Builder
 @Table(name = "countries")
 @Cacheable
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
