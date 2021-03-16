@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -108,6 +109,16 @@ public class UserServiceImpl implements UserService {
                     )
             );
         }
+
+        List<String> userArrCountries = fetchUserArrivalCountries(userId);
+        if (userArrCountries.contains(country.getEn())) {
+            throw new IncorrectRequestException(
+                    String.format(
+                            "‼️*%s* is already in your favorites‼️\n",
+                            country.getEn()
+                    )
+            );
+        }
         trajectoryService.saveByUserAndCountries(user, user.getCountry(), country);
     }
 
@@ -122,6 +133,7 @@ public class UserServiceImpl implements UserService {
         User user = userOptional.get();
         return user.getTrajectories().stream()
                 .map(trajectory -> trajectory.getArrivalCountry().getEn())
+                .sorted()
                 .collect(Collectors.toList());
     }
 
@@ -137,5 +149,18 @@ public class UserServiceImpl implements UserService {
             throw new IncorrectRequestException("‼️*You have to add country first*‼️\n");
         }
         return country.getEn();
+    }
+
+    @Override
+    @Transactional
+    public void removeUserArrivalCountry(
+            Integer userId,
+            String countryName
+    ) throws UserNotFoundException, CountryNotFoundException, IncorrectRequestException {
+        Optional<User> userOptional = findByTelegramUserId(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException(userId);
+        }
+        trajectoryService.removeUserFromTrajectory(userOptional.get(), countryName);
     }
 }

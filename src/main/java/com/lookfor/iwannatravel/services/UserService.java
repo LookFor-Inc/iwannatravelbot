@@ -3,7 +3,6 @@ package com.lookfor.iwannatravel.services;
 import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
 import com.lookfor.iwannatravel.exceptions.IncorrectRequestException;
 import com.lookfor.iwannatravel.exceptions.UserNotFoundException;
-import com.lookfor.iwannatravel.models.Trajectory;
 import com.lookfor.iwannatravel.models.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -69,4 +68,12 @@ public interface UserService {
      * @throws UserNotFoundException exp
      */
     String getUserDepartureCountryName(Integer userId) throws UserNotFoundException, IncorrectRequestException;
+
+    /**
+     * Remove user's arrival country from favorites
+     *
+     * @param userId id of a user
+     * @param countryName country name
+     */
+    void removeUserArrivalCountry(Integer userId, String countryName) throws UserNotFoundException, CountryNotFoundException, IncorrectRequestException;
 }

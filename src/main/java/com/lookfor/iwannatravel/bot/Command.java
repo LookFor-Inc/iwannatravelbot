@@ -13,7 +13,8 @@ public enum Command {
     HELP("help"),
     USER_COUNTRY("from"),
     USER_FAVORITE_COUNTRY("to"),
-    FAVORITES("favorites");
+    FAVORITES("favorites"),
+    REMOVE_FAVORITE("remove");
 
     private final String cmd;
     private final String obj;

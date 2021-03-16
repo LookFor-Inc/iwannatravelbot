@@ -2,6 +2,7 @@ package com.lookfor.iwannatravel.bot.handlers;
 
 import com.lookfor.iwannatravel.interfaces.RootCommandHandler;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -13,14 +14,17 @@ public class IncorrectCommandHandler implements RootCommandHandler<SendMessage> 
         Message message = getReceivedMessage(update);
         return SendMessage.builder()
                 .chatId(String.valueOf(message.getChatId()))
-                .text(
-                        """
+                .parseMode(ParseMode.MARKDOWN)
+                .text("""
                         I do not know this command😔
-                
+                                        
                         Here you can find all my *commands:*
                         /start - 👋
                         /help - 🆘
                         /from - 🛫
+                        /to - 🛬
+                        /favorites - ⭐️
+                        /remove - ❌
                         """
                 )
                 .build();
