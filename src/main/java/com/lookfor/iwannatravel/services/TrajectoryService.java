@@ -3,6 +3,7 @@ package com.lookfor.iwannatravel.services;
 import com.lookfor.iwannatravel.models.Trajectory;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,7 +22,7 @@ public interface TrajectoryService {
      *
      * @return list of country names
      */
-    Collection<String> getAllArrivalCountriesNames();
+    Collection<String> getAllDepartureCountriesNames();
 
     /**
      * Get the trajectory by departure and arrival country names
@@ -30,5 +31,13 @@ public interface TrajectoryService {
      * @param arrivalCountry String
      * @return Trajectory object
      */
-    Optional<Trajectory> getTrajectoryByCountriesNames(String departureCountry, String arrivalCountry);
+    Optional<Trajectory> getTrajectoryByDepartureCountryEnAndArrivalCountryEn(String departureCountry, String arrivalCountry);
+
+    /**
+     * Get list of all trajectories by departure country name
+     *
+     * @param departureCountry String
+     * @return list of the Trajectory object
+     */
+    List<Trajectory> getTrajectoriesByDepartureCountryName(String departureCountry);
 }

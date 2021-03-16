@@ -1,6 +1,5 @@
 package com.lookfor.iwannatravel.services.implementations;
 
-import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
 import com.lookfor.iwannatravel.models.Country;
 import com.lookfor.iwannatravel.repositories.CountryRepository;
 import com.lookfor.iwannatravel.services.CountryService;
@@ -35,20 +34,20 @@ public class CountryServiceImpl implements CountryService {
     public Optional<Country> findCountryByName(String name) {
         return countries.stream()
                 .filter(country ->
-                        name.equals(country.getRu().toLowerCase()) ||
-                        name.equals(country.getUa().toLowerCase()) ||
-                        name.equals(country.getBe().toLowerCase()) ||
-                        name.equals(country.getEn().toLowerCase()) ||
-                        name.equals(country.getEs().toLowerCase()) ||
-                        name.equals(country.getPt().toLowerCase()) ||
-                        name.equals(country.getDe().toLowerCase()) ||
-                        name.equals(country.getFr().toLowerCase()) ||
-                        name.equals(country.getIt().toLowerCase()) ||
-                        name.equals(country.getPl().toLowerCase()) ||
-                        name.equals(country.getJs().toLowerCase()) ||
-                        name.equals(country.getLt().toLowerCase()) ||
-                        name.equals(country.getLv().toLowerCase()) ||
-                        name.equals(country.getCz().toLowerCase())
+                        name.equalsIgnoreCase(country.getRu()) ||
+                        name.equalsIgnoreCase(country.getUa()) ||
+                        name.equalsIgnoreCase(country.getBe()) ||
+                        name.equalsIgnoreCase(country.getEn()) ||
+                        name.equalsIgnoreCase(country.getEs()) ||
+                        name.equalsIgnoreCase(country.getPt()) ||
+                        name.equalsIgnoreCase(country.getDe()) ||
+                        name.equalsIgnoreCase(country.getFr()) ||
+                        name.equalsIgnoreCase(country.getIt()) ||
+                        name.equalsIgnoreCase(country.getPl()) ||
+                        name.equalsIgnoreCase(country.getJs()) ||
+                        name.equalsIgnoreCase(country.getLt()) ||
+                        name.equalsIgnoreCase(country.getLv()) ||
+                        name.equalsIgnoreCase(country.getCz())
                 )
                 .findFirst();
     }
