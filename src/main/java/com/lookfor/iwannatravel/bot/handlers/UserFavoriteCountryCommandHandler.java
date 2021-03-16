@@ -27,16 +27,14 @@ public class UserFavoriteCountryCommandHandler implements RootCommandHandler<Sen
         String responseMessage;
         try {
             userService.saveUserArrivalCountry(message.getFrom().getId(), restOfTextMessage);
-            responseMessage = String.format(
-                    "Country %s was saved to your favorites!👌",
-                    restOfTextMessage.substring(0, 1).toUpperCase() + restOfTextMessage.substring(1)
-            );
+            responseMessage =
+                    """
+                            Country was added to your favorites!👌
+                            Use command /favorites to view a list of all countries you want to travel🗺
+                            """;
         } catch (CountryNotFoundException | UserNotFoundException | IncorrectRequestException exp) {
             log.error(exp.getMessage());
-            responseMessage = String.format(
-                    "Error in saving country %s\n%s",
-                    restOfTextMessage, exp.getMessage()
-            );
+            responseMessage = exp.getMessage();
         }
         return SendMessage.builder()
                 .chatId(String.valueOf(message.getChatId()))

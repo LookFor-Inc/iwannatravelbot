@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -58,10 +57,7 @@ public class TrajectoryServiceImpl implements TrajectoryService {
 
     @Override
     public Optional<Trajectory> getTrajectoryByCountriesNames(String departureCountry, String arrivalCountry) {
-        return trajectoryRepository.findByCountriesNames(
-                StringUtils.capitalize(departureCountry),
-                StringUtils.capitalize(arrivalCountry)
-        );
+        return trajectoryRepository.findByCountriesNames(departureCountry, arrivalCountry);
     }
 
     @Override
