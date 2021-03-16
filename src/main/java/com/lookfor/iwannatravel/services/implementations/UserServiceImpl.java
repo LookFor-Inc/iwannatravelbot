@@ -103,8 +103,9 @@ public class UserServiceImpl implements UserService {
         if (country.getId() == user.getCountry().getId()) {
             throw new IncorrectRequestException(
                     String.format(
-                            "Country %s cannot be both destination and arrival",
-                            country.getEn())
+                            "‼️*%s* cannot be both destination and arrival country‼️\n",
+                            country.getEn()
+                    )
             );
         }
         trajectoryService.saveByUserAndCountries(user, user.getCountry(), country);
@@ -122,5 +123,19 @@ public class UserServiceImpl implements UserService {
         return user.getTrajectories().stream()
                 .map(trajectory -> trajectory.getArrivalCountry().getEn())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUserDepartureCountryName(Integer userId) throws UserNotFoundException, IncorrectRequestException {
+        Optional<User> userOptional = findByTelegramUserId(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException(userId);
+        }
+
+        Country country = userOptional.get().getCountry();
+        if (country == null) {
+            throw new IncorrectRequestException("‼️*You have to add country first*‼️\n");
+        }
+        return country.getEn();
     }
 }

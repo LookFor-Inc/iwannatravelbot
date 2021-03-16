@@ -5,6 +5,6 @@ package com.lookfor.iwannatravel.exceptions;
  */
 public class CountryNotFoundException extends RuntimeException {
     public CountryNotFoundException(String countryName) {
-        super(String.format("Country '%s' not found", countryName));
+        super(String.format("‼️*Country %s does not exist*‼️\n️", countryName));
     }
 }

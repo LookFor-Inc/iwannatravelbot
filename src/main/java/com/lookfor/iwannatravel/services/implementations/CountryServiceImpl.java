@@ -34,20 +34,20 @@ public class CountryServiceImpl implements CountryService {
     public Optional<Country> findCountryByName(String name) {
         final String target = name.toLowerCase();
         return countries.stream()
-                .filter(country -> target.equals(country.getRu().toLowerCase()) ||
-                        target.equals(country.getUa().toLowerCase()) ||
-                        target.equals(country.getBe().toLowerCase()) ||
-                        target.equals(country.getEn().toLowerCase()) ||
-                        target.equals(country.getEs().toLowerCase()) ||
-                        target.equals(country.getPt().toLowerCase()) ||
-                        target.equals(country.getDe().toLowerCase()) ||
-                        target.equals(country.getFr().toLowerCase()) ||
-                        target.equals(country.getIt().toLowerCase()) ||
-                        target.equals(country.getPl().toLowerCase()) ||
-                        target.equals(country.getJs().toLowerCase()) ||
-                        target.equals(country.getLt().toLowerCase()) ||
-                        target.equals(country.getLv().toLowerCase()) ||
-                        target.equals(country.getCz().toLowerCase())
+                .filter(country -> target.equalsIgnoreCase(country.getRu()) ||
+                        target.equalsIgnoreCase(country.getUa()) ||
+                        target.equalsIgnoreCase(country.getBe()) ||
+                        target.equalsIgnoreCase(country.getEn()) ||
+                        target.equalsIgnoreCase(country.getEs()) ||
+                        target.equalsIgnoreCase(country.getPt()) ||
+                        target.equalsIgnoreCase(country.getDe()) ||
+                        target.equalsIgnoreCase(country.getFr()) ||
+                        target.equalsIgnoreCase(country.getIt()) ||
+                        target.equalsIgnoreCase(country.getPl()) ||
+                        target.equalsIgnoreCase(country.getJs()) ||
+                        target.equalsIgnoreCase(country.getLt()) ||
+                        target.equalsIgnoreCase(country.getLv()) ||
+                        target.equalsIgnoreCase(country.getCz())
                 )
                 .findFirst();
     }
