@@ -109,6 +109,16 @@ public class UserServiceImpl implements UserService {
                     )
             );
         }
+
+        List<String> userArrCountries = fetchUserArrivalCountries(userId);
+        if (userArrCountries.contains(country.getEn())) {
+            throw new IncorrectRequestException(
+                    String.format(
+                            "‼️*%s* is already in your favorites‼️\n",
+                            country.getEn()
+                    )
+            );
+        }
         trajectoryService.saveByUserAndCountries(user, user.getCountry(), country);
     }
 

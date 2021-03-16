@@ -27,13 +27,18 @@ public class FavoritesCommandHandler implements RootCommandHandler<SendMessage> 
 
         try {
             List<String> arrCountries = userService.fetchUserArrivalCountries(message.getFrom().getId());
-            sbResponse.append("⭐️Your favorite countries:\n\n");
-            arrCountries.forEach(ac -> sbResponse.append(String.format("*%s*\n", ac)));
+            if (arrCountries.isEmpty()) {
+                sbResponse.append("😔No favorite countries yet\n\n");
+            } else {
+                sbResponse.append("⭐️Your favorite countries:\n\n");
+                arrCountries.forEach(ac -> sbResponse.append(String.format("*%s*\n", ac)));
+            }
         } catch (CountryNotFoundException | UserNotFoundException exp) {
             log.error(exp.getMessage());
             sbResponse.append(exp.getMessage());
         }
 
+        sbResponse.append("\n⭐️To *add* a country you want to travel🏝, use command */to + country name*\n");
         return SendMessage.builder()
                 .chatId(String.valueOf(message.getChatId()))
                 .parseMode(ParseMode.MARKDOWN)
