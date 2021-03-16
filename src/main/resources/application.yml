@@ -7,10 +7,12 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
-    show-sql: false
+    show-sql: true
     open-in-view: false
     hibernate:
       ddl-auto: update
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
 
 telegram:
   bot:

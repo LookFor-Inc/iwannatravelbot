@@ -1,8 +1,6 @@
 package com.lookfor.iwannatravel.models;
 
-import com.lookfor.iwannatravel.dto.CountryDto;
-import lombok.*;
-import org.checkerframework.common.aliasing.qual.Unique;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -11,47 +9,47 @@ import java.util.Set;
  * Country entity
  */
 @Getter
-@Setter
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "countries")
-public class Country implements Comparable<CountryDto> {
+public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    @Column
-    @Unique
-    private String name;
+    private String ru;
 
-    @Column
-    private Boolean tourism;
+    private String ua;
 
-    @Column
-    private String documents;
+    private String be;
 
-    @Column
-    private Boolean quarantine;
+    private String en;
 
-    @Column
-    private Integer quarantineDays;
+    private String es;
 
-    @Lob
-    @Column
-    private String quarantineNote;
+    private String pt;
 
-    @Lob
-    @Column
-    private String note;
+    private String de;
 
-    @Column
-    @ManyToMany(mappedBy = "countries")
+    private String fr;
+
+    private String it;
+
+    private String pl;
+
+    private String js;
+
+    private String lt;
+
+    private String lv;
+
+    private String cz;
+
+    @OneToMany(mappedBy = "country")
     private Set<User> users;
 
-    @Override
-    public int compareTo(CountryDto anotherCountry) {
-        return Boolean.compare(tourism, anotherCountry.isTourism());
-    }
+    @OneToMany(mappedBy = "departureCountry")
+    private Set<Trajectory> departureCountries;
+
+    @OneToMany(mappedBy = "arrivalCountry")
+    private Set<Trajectory> arrivalCountries;
 }

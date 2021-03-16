@@ -1,6 +1,5 @@
 package com.lookfor.iwannatravel.services;
 
-import com.lookfor.iwannatravel.dto.CountryDto;
 import com.lookfor.iwannatravel.models.Country;
 
 import java.util.List;
@@ -11,24 +10,24 @@ import java.util.Optional;
  */
 public interface CountryService {
     /**
-     * Fetch a Country by name
+     * Fetch all Country entities
      *
-     * @param name country name
-     * @return country
+     * @return list of countries
      */
-    Optional<Country> fetchByName(String name);
+    List<Country> fetchAllCountries();
 
     /**
-     * Save or update a Country
+     * Get Country by its name
      *
-     * @param countryDto country dto object
+     * @param name of Country
+     * @return Country
      */
-    void saveOrUpdate(CountryDto countryDto);
+    Optional<Country> findCountryByName(String name);
 
     /**
-     * Save or update the list of Countries
+     * Get all countries (sorted by en name)
      *
-     * @param countryDtoList list of country dto objects
+     * @return list of countries
      */
-    void saveOrUpdateAll(List<CountryDto> countryDtoList);
+    List<Country> getAllSortedCountries();
 }

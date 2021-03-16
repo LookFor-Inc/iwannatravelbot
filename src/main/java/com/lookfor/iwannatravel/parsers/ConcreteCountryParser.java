@@ -4,7 +4,7 @@ import com.lookfor.iwannatravel.dto.ConcreteCountryResponse;
 import com.lookfor.iwannatravel.dto.CountryRequest;
 import com.lookfor.iwannatravel.interfaces.CountryParser;
 import com.lookfor.iwannatravel.models.AllowStatus;
-import com.lookfor.iwannatravel.parsers.utils.DateUtils;
+import com.lookfor.iwannatravel.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -81,7 +81,7 @@ public class ConcreteCountryParser implements CountryParser {
      */
     private Date getLastUpdate(Document doc) {
         String lastUpdate = doc.select("time.date").text();
-        return DateUtils.stringToDate(lastUpdate);
+        return DateUtil.stringToDate(lastUpdate);
     }
 
     /**

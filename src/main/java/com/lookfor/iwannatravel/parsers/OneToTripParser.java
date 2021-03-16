@@ -3,7 +3,7 @@ package com.lookfor.iwannatravel.parsers;
 import com.lookfor.iwannatravel.dto.ParserDto;
 import com.lookfor.iwannatravel.dto.CountryDto;
 import com.lookfor.iwannatravel.interfaces.RussianParser;
-import com.lookfor.iwannatravel.parsers.utils.DateUtils;
+import com.lookfor.iwannatravel.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -58,7 +58,7 @@ public class OneToTripParser implements RussianParser {
      */
     private Date getDate(Document doc) {
         String lastUpdate = doc.select("article header time").text();
-        return DateUtils.stringToDate(lastUpdate);
+        return DateUtil.stringToDate(lastUpdate);
     }
 
     /**

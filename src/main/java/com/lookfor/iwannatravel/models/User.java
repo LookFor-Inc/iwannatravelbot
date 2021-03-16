@@ -10,20 +10,20 @@ import java.util.Set;
  */
 @Getter
 @Setter
-@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "users")
 public class User {
     @Id
-    @Column
     private Integer telegramUserId;
 
-    @Column
     private String username;
 
-    @Column
-    @ManyToMany
-    private Set<Country> countries;
+    @ManyToMany(mappedBy = "users")
+    private Set<Trajectory> trajectories;
+
+    @ManyToOne
+    private Country country;
 }
