@@ -21,7 +21,7 @@ public class User {
 
     private String username;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "users")
     private Set<Trajectory> trajectories;
 
     @ManyToOne

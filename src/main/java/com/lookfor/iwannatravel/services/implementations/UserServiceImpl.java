@@ -4,7 +4,6 @@ import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
 import com.lookfor.iwannatravel.exceptions.IncorrectRequestException;
 import com.lookfor.iwannatravel.exceptions.UserNotFoundException;
 import com.lookfor.iwannatravel.models.Country;
-import com.lookfor.iwannatravel.models.Trajectory;
 import com.lookfor.iwannatravel.models.User;
 import com.lookfor.iwannatravel.repositories.UserRepository;
 import com.lookfor.iwannatravel.services.CountryService;
@@ -18,7 +17,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Collections;
 import java.util.Optional;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -67,17 +65,19 @@ public class UserServiceImpl implements UserService {
             Integer userId,
             String countryName
     ) throws CountryNotFoundException, UserNotFoundException {
-        Optional<Country> country = countryService.findCountryByName(countryName);
-        if (country.isEmpty()) {
-            throw new CountryNotFoundException(countryName);
-        }
-
         Optional<User> userOptional = findByTelegramUserId(userId);
         if (userOptional.isEmpty()) {
             throw new UserNotFoundException(userId);
         }
+
         User user = userOptional.get();
-        user.setCountry(country.get());
+        trajectoryService.removeUser(user);
+
+        Optional<Country> countryOptional = countryService.findCountryByName(countryName);
+        if (countryOptional.isEmpty()) {
+            throw new CountryNotFoundException(countryName);
+        }
+        user.setCountry(countryOptional.get());
     }
 
     @Override
@@ -95,8 +95,9 @@ public class UserServiceImpl implements UserService {
         if (userOptional.isEmpty()) {
             throw new UserNotFoundException(userId);
         }
-        User user = userOptional.get();
+
         Country country = countryOptional.get();
+        User user = userOptional.get();
         if (country.getId() == user.getCountry().getId()) {
             throw new IncorrectRequestException(
                     String.format(
@@ -104,13 +105,6 @@ public class UserServiceImpl implements UserService {
                             country.getEn())
             );
         }
-        Trajectory trajectory =
-                Trajectory.builder()
-                        .user(user)
-                        .departureCountry(user.getCountry())
-                        .arrivalCountry(country)
-                        .build();
-        trajectoryService.save(trajectory);
-        user.setTrajectories(Set.of(trajectory));
+        trajectoryService.saveByUserAndCountries(user, user.getCountry(), country);
     }
 }

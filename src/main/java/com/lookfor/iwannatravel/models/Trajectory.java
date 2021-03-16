@@ -9,6 +9,7 @@ import java.util.Set;
  * Trajectory entity
  */
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

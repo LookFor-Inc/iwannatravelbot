@@ -34,8 +34,8 @@ public class UserCountryCommandHandler implements RootCommandHandler<SendMessage
         } catch (CountryNotFoundException | UserNotFoundException exp) {
             log.error(exp.getMessage());
             responseMessage = String.format(
-                    "Error in saving country %s",
-                    restOfTextMessage
+                    "Error in saving country %s\n%s",
+                    restOfTextMessage, exp.getMessage()
             );
         }
         return SendMessage.builder()

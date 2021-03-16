@@ -33,7 +33,10 @@ public class UserFavoriteCountryCommandHandler implements RootCommandHandler<Sen
             );
         } catch (CountryNotFoundException | UserNotFoundException | IncorrectRequestException exp) {
             log.error(exp.getMessage());
-            responseMessage = String.format("Error in saving country %s", restOfTextMessage);
+            responseMessage = String.format(
+                    "Error in saving country %s\n%s",
+                    restOfTextMessage, exp.getMessage()
+            );
         }
         return SendMessage.builder()
                 .chatId(String.valueOf(message.getChatId()))
