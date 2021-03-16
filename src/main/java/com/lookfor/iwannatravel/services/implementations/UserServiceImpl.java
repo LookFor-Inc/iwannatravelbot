@@ -16,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -106,5 +108,19 @@ public class UserServiceImpl implements UserService {
             );
         }
         trajectoryService.saveByUserAndCountries(user, user.getCountry(), country);
+    }
+
+    @Override
+    @Transactional
+    public List<String> fetchUserArrivalCountries(Integer userId) throws UserNotFoundException {
+        Optional<User> userOptional = findByTelegramUserId(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException(userId);
+        }
+
+        User user = userOptional.get();
+        return user.getTrajectories().stream()
+                .map(trajectory -> trajectory.getArrivalCountry().getEn())
+                .collect(Collectors.toList());
     }
 }
