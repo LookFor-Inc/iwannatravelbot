@@ -21,6 +21,8 @@ public class HelpCommandHandler implements RootCommandHandler<SendMessage> {
                         /start - 👋
                         /help - 🆘
                         /from - 🛫
+                        /to - 🛬
+                        /favorites - ⭐️
                         """
                 )
                 .build();

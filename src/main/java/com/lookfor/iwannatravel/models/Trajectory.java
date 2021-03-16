@@ -5,17 +5,24 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * Trajectory entity
+ */
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "trajectories")
 public class Trajectory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    private Boolean restricted;
+    private boolean restricted;
 
+    @Singular
     @ManyToMany
     private Set<User> users;
 

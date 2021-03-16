@@ -1,6 +1,5 @@
 package com.lookfor.iwannatravel.services.implementations;
 
-import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
 import com.lookfor.iwannatravel.models.Country;
 import com.lookfor.iwannatravel.repositories.CountryRepository;
 import com.lookfor.iwannatravel.services.CountryService;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -24,32 +24,31 @@ public class CountryServiceImpl implements CountryService {
         countries = fetchAllCountries();
     }
 
-    @Cacheable("countries")
     @Override
+    @Cacheable("countries")
     public List<Country> fetchAllCountries() {
         return countryRepository.findAll();
     }
 
     @Override
-    public Country getCountryByName(String name) throws CountryNotFoundException {
+    public Optional<Country> findCountryByName(String name) {
+        final String target = name.toLowerCase();
         return countries.stream()
-                .filter(country ->
-                        name.equals(country.getRu().toLowerCase()) ||
-                        name.equals(country.getUa().toLowerCase()) ||
-                        name.equals(country.getBe().toLowerCase()) ||
-                        name.equals(country.getEn().toLowerCase()) ||
-                        name.equals(country.getEs().toLowerCase()) ||
-                        name.equals(country.getPt().toLowerCase()) ||
-                        name.equals(country.getDe().toLowerCase()) ||
-                        name.equals(country.getFr().toLowerCase()) ||
-                        name.equals(country.getIt().toLowerCase()) ||
-                        name.equals(country.getPl().toLowerCase()) ||
-                        name.equals(country.getJs().toLowerCase()) ||
-                        name.equals(country.getLt().toLowerCase()) ||
-                        name.equals(country.getLv().toLowerCase()) ||
-                        name.equals(country.getCz().toLowerCase())
+                .filter(country -> target.equalsIgnoreCase(country.getRu()) ||
+                        target.equalsIgnoreCase(country.getUa()) ||
+                        target.equalsIgnoreCase(country.getBe()) ||
+                        target.equalsIgnoreCase(country.getEn()) ||
+                        target.equalsIgnoreCase(country.getEs()) ||
+                        target.equalsIgnoreCase(country.getPt()) ||
+                        target.equalsIgnoreCase(country.getDe()) ||
+                        target.equalsIgnoreCase(country.getFr()) ||
+                        target.equalsIgnoreCase(country.getIt()) ||
+                        target.equalsIgnoreCase(country.getPl()) ||
+                        target.equalsIgnoreCase(country.getJs()) ||
+                        target.equalsIgnoreCase(country.getLt()) ||
+                        target.equalsIgnoreCase(country.getLv()) ||
+                        target.equalsIgnoreCase(country.getCz())
                 )
-                .findFirst()
-                .orElseThrow(() -> new CountryNotFoundException(name));
+                .findFirst();
     }
 }
