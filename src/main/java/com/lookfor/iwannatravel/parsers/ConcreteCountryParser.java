@@ -8,7 +8,6 @@ import com.lookfor.iwannatravel.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
@@ -56,20 +55,12 @@ public class ConcreteCountryParser implements CountryParser {
         AllowStatus tourism = getAllowStatus(statuses, ".type-open_for_tourism > span");
         AllowStatus quarantine = getAllowStatus(statuses, ".type-quarantine > span");
 
-        Element table = content.select("table.params").first();
-        String crossingRules = getTableValue(table, ".crossing_rules");
-        String flightRestrictions = getTableValue(table, ".airlines_updates");
-        String quarantineNote = getTableValue(table, ".quarantine");
-
         return ConcreteCountryResponse.builder()
                 .lastUpdate(lastUpdate)
                 .citizens(citizens)
                 .foreigners(foreigners)
                 .tourism(tourism)
                 .quarantine(quarantine)
-                .crossingRules(crossingRules)
-                .flightRestrictions(flightRestrictions)
-                .quarantineNote(quarantineNote)
                 .build();
     }
 
@@ -93,23 +84,6 @@ public class ConcreteCountryParser implements CountryParser {
      */
     private AllowStatus getAllowStatus(Elements statuses, String selector) {
         return AllowStatus.value(statuses.select(selector).text());
-    }
-
-    /**
-     * Get value from table
-     *
-     * @param table Jsoup element
-     * @param selector items
-     * @return table value
-     */
-    private String getTableValue(Element table, String selector) {
-        String result = table.select(selector + " .spoiler-inner").text();
-
-        if (result.isBlank()) {
-            result = table.select(selector + " td").get(1).text();
-        }
-
-        return result;
     }
 
     /**

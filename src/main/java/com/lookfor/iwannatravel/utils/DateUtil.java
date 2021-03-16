@@ -1,10 +1,13 @@
 package com.lookfor.iwannatravel.utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateUtil {
+    public static final String PATTERN = "dd.MM.yyyy";
+
     /**
      * Convert string date to Date object
      *
@@ -12,7 +15,7 @@ public class DateUtil {
      * @return Date object
      */
     public static Date stringToDate(String str) {
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat inputFormat = new SimpleDateFormat(PATTERN);
         Date date = null;
 
         try {
@@ -22,5 +25,16 @@ public class DateUtil {
         }
 
         return date;
+    }
+
+    /**
+     * Format Date object to the string
+     *
+     * @param date Date object
+     * @return String
+     */
+    public static String dateToString(Date date) {
+        DateFormat formatter = new SimpleDateFormat(PATTERN);
+        return formatter.format(date);
     }
 }
