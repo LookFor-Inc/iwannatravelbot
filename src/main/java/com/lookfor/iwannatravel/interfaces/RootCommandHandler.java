@@ -27,6 +27,7 @@ public interface RootCommandHandler<T extends PartialBotApiMethod<?>> {
     default Message getReceivedMessage(Update update) {
         return update.hasMessage() ?
                 update.getMessage() : update.hasEditedMessage() ?
-                update.getEditedMessage() : null;
+                update.getEditedMessage() : update.hasCallbackQuery() ?
+                update.getCallbackQuery().getMessage() : null;
     }
 }

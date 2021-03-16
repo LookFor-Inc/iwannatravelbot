@@ -25,7 +25,9 @@ public class TelegramMessageParser extends Thread {
 
         Message message = update.hasMessage() ?
                 update.getMessage() : update.hasEditedMessage() ?
-                update.getEditedMessage() : null;
+                update.getEditedMessage() : update.hasCallbackQuery() ?
+                update.getCallbackQuery().getMessage() : null;
+
         if (message == null) {
             return;
         }
