@@ -1,6 +1,9 @@
 package com.lookfor.iwannatravel.services;
 
+import com.lookfor.iwannatravel.models.Country;
 import com.lookfor.iwannatravel.models.Trajectory;
+import com.lookfor.iwannatravel.models.User;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +21,15 @@ public interface TrajectoryService {
     void save(Trajectory trajectory);
 
     /**
+     * Save new Trajectory entity by user and his countries
+     *
+     * @param user User entity
+     * @param departureCountry departure Country
+     * @param arrivalCountry arrival Country
+     */
+    void saveByUserAndCountries(User user, Country departureCountry, Country arrivalCountry);
+
+    /**
      * Get list of all names of the departures countries
      *
      * @return list of country names
@@ -25,7 +37,7 @@ public interface TrajectoryService {
     Collection<String> getAllDepartureCountriesNames();
 
     /**
-     * Get the trajectory by departure and arrival country names
+     * Get the Trajectory by departure and arrival country names
      *
      * @param departureCountry String
      * @param arrivalCountry String
@@ -40,4 +52,19 @@ public interface TrajectoryService {
      * @return list of the Trajectory object
      */
     List<Trajectory> getTrajectoriesByDepartureCountryName(String departureCountry);
+
+    /**
+     * Remove User from Trajectory entity
+     *
+     * @param user source data
+     */
+    void removeUser(User user);
+
+    /**
+     * Get list of all users ids in the trajectory
+     *
+     * @param trajectoryId Trajectory id
+     * @return Collection of users ids
+     */
+    Collection<Integer> getUsersIdsByTrajectoryId(long trajectoryId);
 }

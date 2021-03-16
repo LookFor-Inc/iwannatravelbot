@@ -11,33 +11,29 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.lookfor.iwannatravel.utils.TextMessageUtil.getRestOfTextMessageWithoutCommand;
+import java.util.List;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UserCountryCommandHandler implements RootCommandHandler<SendMessage> {
+public class FavoritesCommandHandler implements RootCommandHandler<SendMessage> {
     private final UserService userService;
 
     @Override
     public SendMessage doParse(Update update) {
         Message message = getReceivedMessage(update);
-        String restOfTextMessage = getRestOfTextMessageWithoutCommand(message.getText());
-        String responseMessage;
+        StringBuilder sbResponse = new StringBuilder();
         try {
-            userService.saveUserDepartureCountry(message.getFrom().getId(), restOfTextMessage);
-            responseMessage =
-                    """
-                            Your country was successfully saved!😎
-                            Use command /to <Country> to set the country you want to travel🏖️
-                            """;
+            List<String> arrCountries = userService.fetchUserArrivalCountries(message.getFrom().getId());
+            sbResponse.append("All your favorite countries:\n");
+            arrCountries.forEach(ac -> sbResponse.append(ac).append("\n"));
         } catch (CountryNotFoundException | UserNotFoundException exp) {
             log.error(exp.getMessage());
-            responseMessage = exp.getMessage();
+            sbResponse.append(exp.getMessage());
         }
         return SendMessage.builder()
                 .chatId(String.valueOf(message.getChatId()))
-                .text(responseMessage)
+                .text(sbResponse.toString())
                 .build();
     }
 }

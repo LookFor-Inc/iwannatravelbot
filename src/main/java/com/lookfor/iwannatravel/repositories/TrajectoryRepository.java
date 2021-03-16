@@ -19,7 +19,7 @@ public interface TrajectoryRepository extends JpaRepository<Trajectory, Long> {
     @Query(value = "SELECT t FROM Trajectory t " +
             "JOIN t.departureCountry c1 " +
             "JOIN t.arrivalCountry c2 " +
-            "WHERE c1.en = ?1 AND c2.en = ?2")
+            "WHERE LOWER(c1.en) = LOWER(?1) AND LOWER(c2.en) = LOWER(?2)")
     Optional<Trajectory> findByDepartureCountryEnAndArrivalCountryEn(String departureCountry, String arrivalCountry);
 
     List<Trajectory> findAllByDepartureCountry(Country departureCountry);

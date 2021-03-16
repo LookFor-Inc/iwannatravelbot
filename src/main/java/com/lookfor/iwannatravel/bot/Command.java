@@ -12,7 +12,8 @@ public enum Command {
     GREETING("start"),
     HELP("help"),
     USER_COUNTRY("from"),
-    USER_FAVORITE_COUNTRY("to");
+    USER_FAVORITE_COUNTRY("to"),
+    FAVORITES("favorites");
 
     private final String cmd;
     private final String obj;

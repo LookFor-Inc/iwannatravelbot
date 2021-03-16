@@ -1,10 +1,10 @@
-package com.lookfor.iwannatravel.parsers.utils;
+package com.lookfor.iwannatravel.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DateUtils {
+public class DateUtil {
     /**
      * Convert string date to Date object
      *

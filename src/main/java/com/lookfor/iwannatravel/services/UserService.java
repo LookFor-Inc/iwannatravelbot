@@ -6,6 +6,7 @@ import com.lookfor.iwannatravel.exceptions.UserNotFoundException;
 import com.lookfor.iwannatravel.models.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -49,4 +50,21 @@ public interface UserService {
      * @param countryName user's Country name
      */
     void saveUserArrivalCountry(Integer userId, String countryName) throws CountryNotFoundException, UserNotFoundException, IncorrectRequestException;
+
+    /**
+     * Fetch list of arrival country names (in english)
+     *
+     * @param userId id of a user
+     * @return list of user's arrival country names (strings)
+     */
+    List<String> fetchUserArrivalCountries(Integer userId) throws UserNotFoundException;
+
+    /**
+     * Get name of user's departure country name
+     *
+     * @param userId id of a user
+     * @return name of a country (in english)
+     * @throws UserNotFoundException exp
+     */
+    String getUserDepartureCountryName(Integer userId) throws UserNotFoundException, IncorrectRequestException;
 }
