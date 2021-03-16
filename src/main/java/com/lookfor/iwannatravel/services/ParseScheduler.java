@@ -102,12 +102,14 @@ public class ParseScheduler {
                     messageSender.sendToUsers(usersIds, message);
                 }
             } else { // restricted
-                log.info("Insert restriction info for {} -> {}", countryName, arrivalCountryName);
-                trajectory.setRestricted(true);
-                trajectory.setNote("The country is closed for tourism");
-                trajectoryService.save(trajectory);
+                if (!trajectory.isRestricted()) {
+                    log.info("Insert restriction info for {} -> {}", countryName, arrivalCountryName);
+                    trajectory.setRestricted(true);
+                    trajectory.setNote("The country is closed for tourism");
+                    trajectoryService.save(trajectory);
 
-                messageSender.sendToUsers(usersIds, StatusChangeMessages.getRestrictionsMessage(countryName));
+                    messageSender.sendToUsers(usersIds, StatusChangeMessages.getRestrictionsMessage(arrivalCountryName));
+                }
             }
         }
     }
