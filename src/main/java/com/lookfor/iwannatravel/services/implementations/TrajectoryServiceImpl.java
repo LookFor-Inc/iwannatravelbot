@@ -1,5 +1,7 @@
 package com.lookfor.iwannatravel.services.implementations;
 
+import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
+import com.lookfor.iwannatravel.exceptions.IncorrectRequestException;
 import com.lookfor.iwannatravel.models.Country;
 import com.lookfor.iwannatravel.models.Trajectory;
 import com.lookfor.iwannatravel.models.User;
@@ -62,7 +64,8 @@ public class TrajectoryServiceImpl implements TrajectoryService {
     @Override
     @Transactional
     public void removeUser(User user) {
-        List<Trajectory> trajectoriesByDepartureCountry = trajectoryRepository.findAllByDepartureCountry(user.getCountry());
+        List<Trajectory> trajectoriesByDepartureCountry =
+                trajectoryRepository.findAllByDepartureCountry(user.getCountry());
         trajectoriesByDepartureCountry.forEach(
                 trajectory -> trajectory.getUsers().remove(user)
         );
@@ -96,5 +99,30 @@ public class TrajectoryServiceImpl implements TrajectoryService {
         }
 
         return list;
+    }
+
+    @Override
+    @Transactional
+    public void removeUserFromTrajectory(
+            User user,
+            String arrivalCountry
+    ) throws CountryNotFoundException, IncorrectRequestException {
+        List<Trajectory> trajectoriesByArrivalCountry =
+                trajectoryRepository.findAllByArrivalCountryEn(arrivalCountry);
+        if (trajectoriesByArrivalCountry.isEmpty()) {
+            throw new CountryNotFoundException(arrivalCountry);
+        }
+
+        Trajectory userTrajectory =
+                trajectoriesByArrivalCountry.stream()
+                        .filter(trajectory -> trajectory.getUsers().contains(user))
+                        .findFirst()
+                        .orElse(null);
+
+        if (userTrajectory == null) {
+            throw new IncorrectRequestException("*%s* is not your favorite country😔");
+        }
+        userTrajectory.getUsers().remove(user);
+        trajectoryRepository.save(userTrajectory);
     }
 }

@@ -150,4 +150,17 @@ public class UserServiceImpl implements UserService {
         }
         return country.getEn();
     }
+
+    @Override
+    @Transactional
+    public void removeUserArrivalCountry(
+            Integer userId,
+            String countryName
+    ) throws UserNotFoundException, CountryNotFoundException, IncorrectRequestException {
+        Optional<User> userOptional = findByTelegramUserId(userId);
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException(userId);
+        }
+        trajectoryService.removeUserFromTrajectory(userOptional.get(), countryName);
+    }
 }

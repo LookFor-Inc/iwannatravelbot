@@ -1,5 +1,7 @@
 package com.lookfor.iwannatravel.services;
 
+import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
+import com.lookfor.iwannatravel.exceptions.IncorrectRequestException;
 import com.lookfor.iwannatravel.models.Country;
 import com.lookfor.iwannatravel.models.Trajectory;
 import com.lookfor.iwannatravel.models.User;
@@ -67,4 +69,12 @@ public interface TrajectoryService {
      * @return Collection of users ids
      */
     Collection<Integer> getUsersIdsByTrajectoryId(long trajectoryId);
+
+    /**
+     * Remove user from trajectory
+     *
+     * @param user source
+     * @param arrivalCountry arrival country
+     */
+    void removeUserFromTrajectory(User user, String arrivalCountry) throws CountryNotFoundException, IncorrectRequestException;
 }

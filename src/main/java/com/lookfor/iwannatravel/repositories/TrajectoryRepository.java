@@ -22,5 +22,10 @@ public interface TrajectoryRepository extends JpaRepository<Trajectory, Long> {
             "WHERE LOWER(c1.en) = LOWER(?1) AND LOWER(c2.en) = LOWER(?2)")
     Optional<Trajectory> findByDepartureCountryEnAndArrivalCountryEn(String departureCountry, String arrivalCountry);
 
+    @Query(value = "FROM Trajectory t " +
+            "JOIN t.arrivalCountry c " +
+            "WHERE LOWER(c.en) = LOWER(:arrivalCountry)")
+    List<Trajectory> findAllByArrivalCountryEn(String arrivalCountry);
+
     List<Trajectory> findAllByDepartureCountry(Country departureCountry);
 }

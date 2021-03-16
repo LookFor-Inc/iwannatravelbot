@@ -68,4 +68,12 @@ public interface UserService {
      * @throws UserNotFoundException exp
      */
     String getUserDepartureCountryName(Integer userId) throws UserNotFoundException, IncorrectRequestException;
+
+    /**
+     * Remove user's arrival country from favorites
+     *
+     * @param userId id of a user
+     * @param countryName country name
+     */
+    void removeUserArrivalCountry(Integer userId, String countryName) throws UserNotFoundException, CountryNotFoundException, IncorrectRequestException;
 }
