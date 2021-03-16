@@ -120,7 +120,9 @@ public class TrajectoryServiceImpl implements TrajectoryService {
                         .orElse(null);
 
         if (userTrajectory == null) {
-            throw new IncorrectRequestException("*%s* is not your favorite country😔");
+            throw new IncorrectRequestException(
+                    String.format("*%s* is not your favorite country😔", arrivalCountry)
+            );
         }
         userTrajectory.getUsers().remove(user);
         trajectoryRepository.save(userTrajectory);
