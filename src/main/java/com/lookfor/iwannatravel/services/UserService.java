@@ -56,6 +56,7 @@ public interface UserService {
      *
      * @param userId id of a user
      * @return list of user's arrival country names (strings)
+     * @throws UserNotFoundException exp
      */
     List<String> fetchUserArrivalCountries(Integer userId) throws UserNotFoundException;
 

@@ -103,8 +103,9 @@ public class UserServiceImpl implements UserService {
         if (country.getId() == user.getCountry().getId()) {
             throw new IncorrectRequestException(
                     String.format(
-                            "Country %s cannot be both destination and arrival",
-                            country.getEn())
+                            "‼️*%s* cannot be both destination and arrival country‼️\n",
+                            country.getEn()
+                    )
             );
         }
         trajectoryService.saveByUserAndCountries(user, user.getCountry(), country);
