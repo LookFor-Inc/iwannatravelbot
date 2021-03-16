@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,19 +88,23 @@ public class UserServiceImpl implements UserService {
             Integer userId,
             String countryName
     ) throws CountryNotFoundException, UserNotFoundException, IncorrectRequestException {
+        Optional<User> userOptional = findByTelegramUserId(userId);
+        userOptional.orElseThrow(() -> new UserNotFoundException(userId));
+        User user = userOptional.get();
+        Country userCountry = user.getCountry();
+
+        if (userCountry == null) {
+            throw new IncorrectRequestException("‼️*Set your country first*‼️\n");
+        }
+
         Optional<Country> countryOptional = countryService.findCountryByName(countryName);
         if (countryOptional.isEmpty()) {
             throw new CountryNotFoundException(countryName);
         }
 
-        Optional<User> userOptional = findByTelegramUserId(userId);
-        if (userOptional.isEmpty()) {
-            throw new UserNotFoundException(userId);
-        }
-
         Country country = countryOptional.get();
-        User user = userOptional.get();
-        if (country.getId() == user.getCountry().getId()) {
+
+        if (country.getId() == userCountry.getId()) {
             throw new IncorrectRequestException(
                     String.format(
                             "‼️*%s* cannot be both destination and arrival country‼️\n",
@@ -119,7 +122,7 @@ public class UserServiceImpl implements UserService {
                     )
             );
         }
-        trajectoryService.saveByUserAndCountries(user, user.getCountry(), country);
+        trajectoryService.saveByUserAndCountries(user, userCountry, country);
     }
 
     @Override

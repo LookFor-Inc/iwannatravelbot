@@ -14,7 +14,8 @@ public enum Command {
     USER_COUNTRY("from"),
     USER_FAVORITE_COUNTRY("to"),
     FAVORITES("favorites"),
-    REMOVE_FAVORITE("remove");
+    REMOVE_FAVORITE("remove"),
+    COUNTRY_INFO("info");
 
     private final String cmd;
     private final String obj;
