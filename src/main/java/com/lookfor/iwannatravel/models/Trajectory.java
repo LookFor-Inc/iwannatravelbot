@@ -14,8 +14,6 @@ public class Trajectory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer userId;
-
     private Boolean restricted;
 
     @ManyToMany
