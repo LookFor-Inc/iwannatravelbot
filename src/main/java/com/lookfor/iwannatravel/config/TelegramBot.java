@@ -66,7 +66,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         TelegramMessageParser parser =
-                new TelegramMessageParser(this, update, handler);
+                new TelegramMessageParser(this, update, handler, appContext);
 
         // Start thread for parsing sent message
         parser.start();
