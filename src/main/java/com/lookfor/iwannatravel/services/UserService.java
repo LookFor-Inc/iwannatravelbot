@@ -3,7 +3,6 @@ package com.lookfor.iwannatravel.services;
 import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
 import com.lookfor.iwannatravel.exceptions.IncorrectRequestException;
 import com.lookfor.iwannatravel.exceptions.UserNotFoundException;
-import com.lookfor.iwannatravel.models.Trajectory;
 import com.lookfor.iwannatravel.models.User;
 import org.telegram.telegrambots.meta.api.objects.Message;
 

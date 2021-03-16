@@ -4,22 +4,22 @@ import com.lookfor.iwannatravel.models.Country;
 import com.lookfor.iwannatravel.models.Trajectory;
 import com.lookfor.iwannatravel.models.User;
 import com.lookfor.iwannatravel.repositories.TrajectoryRepository;
+import com.lookfor.iwannatravel.services.CountryService;
 import com.lookfor.iwannatravel.services.TrajectoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TrajectoryServiceImpl implements TrajectoryService {
     private final TrajectoryRepository trajectoryRepository;
+    private final CountryService countryService;
 
     @Override
     public void save(Trajectory trajectory) {
@@ -27,6 +27,15 @@ public class TrajectoryServiceImpl implements TrajectoryService {
     }
 
     @Override
+    public Collection<String> getAllDepartureCountriesNames() {
+        return new HashSet<>(trajectoryRepository.findAllDepartureCountriesNames());
+    }
+
+    @Override
+    public Optional<Trajectory> getTrajectoryByDepartureCountryEnAndArrivalCountryEn(String departureCountry, String arrivalCountry) {
+        return trajectoryRepository.findByDepartureCountryEnAndArrivalCountryEn(departureCountry, arrivalCountry);
+    }
+
     @Transactional
     public void saveByUserAndCountries(
             User user,
@@ -34,7 +43,7 @@ public class TrajectoryServiceImpl implements TrajectoryService {
             Country arrivalCountry
     ) {
         Optional<Trajectory> trajectoryOptional =
-                getTrajectoryByCountriesNames(departureCountry.getEn(), arrivalCountry.getEn());
+                getTrajectoryByDepartureCountryEnAndArrivalCountryEn(departureCountry.getEn(), arrivalCountry.getEn());
 
         Trajectory trajectory;
         if (trajectoryOptional.isEmpty()) {
@@ -51,16 +60,6 @@ public class TrajectoryServiceImpl implements TrajectoryService {
     }
 
     @Override
-    public Collection<String> getAllArrivalCountriesNames() {
-        return new HashSet<>(trajectoryRepository.findAllArrivalCountriesNames());
-    }
-
-    @Override
-    public Optional<Trajectory> getTrajectoryByCountriesNames(String departureCountry, String arrivalCountry) {
-        return trajectoryRepository.findByCountriesNames(departureCountry, arrivalCountry);
-    }
-
-    @Override
     @Transactional
     public void removeUser(User user) {
         List<Trajectory> trajectoriesByDepartureCountry = trajectoryRepository.findAllByDepartureCountry(user.getCountry());
@@ -68,5 +67,34 @@ public class TrajectoryServiceImpl implements TrajectoryService {
                 trajectory -> trajectory.getUsers().remove(user)
         );
         trajectoryRepository.saveAll(trajectoriesByDepartureCountry);
+    }
+
+    @Override
+    @Transactional
+    public Collection<Integer> getUsersIdsByTrajectoryId(long trajectoryId) {
+        Optional<Trajectory> trajectoryOptional = trajectoryRepository.findById(trajectoryId);
+        List<Integer> ids = new ArrayList<>();
+
+        if (trajectoryOptional.isPresent()) {
+            ids = trajectoryOptional.get()
+                    .getUsers().stream()
+                    .map(User::getTelegramUserId)
+                    .collect(Collectors.toList());
+        }
+        return ids;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Trajectory> getTrajectoriesByDepartureCountryName(String departureCountry) {
+        Optional<Country> countryOptional = countryService.findCountryByName(departureCountry);
+        List<Trajectory> list = new ArrayList<>();
+
+        if (countryOptional.isPresent()) {
+            Country country = countryOptional.get();
+            list = trajectoryRepository.findAllByDepartureCountry(country);
+        }
+
+        return list;
     }
 }
