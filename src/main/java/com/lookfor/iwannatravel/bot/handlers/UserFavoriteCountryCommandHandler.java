@@ -34,7 +34,7 @@ public class UserFavoriteCountryCommandHandler implements RootCommandHandler<Sen
 
         try {
             if (restOfTextMessage.isEmpty()) {
-                List<Country> countries = countryService.fetchAllCountries();
+                List<Country> countries = countryService.getAllSortedCountries();
                 // TODO: send countries to keyboard
                 for (int i = 0; i < 10; i++) {
                     sbResponse.append(countries.get(i).getEn()).append("\n");

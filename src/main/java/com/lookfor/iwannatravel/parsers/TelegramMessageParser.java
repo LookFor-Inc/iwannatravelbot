@@ -32,6 +32,7 @@ public class TelegramMessageParser extends Thread {
 
         try {
             PartialBotApiMethod<?> method = rootCommandHandler.doParse(update);
+
             if (method instanceof SendMessage) {
                 log.info(String.format(
                         "To @%s (%s): '%s'", message.getFrom().getUserName(), message.getChatId(), ((SendMessage) method).getText())

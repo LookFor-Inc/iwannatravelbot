@@ -9,8 +9,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -21,7 +23,9 @@ public class CountryServiceImpl implements CountryService {
 
     @PostConstruct
     private void loadCountries() {
-        countries = fetchAllCountries();
+        countries = fetchAllCountries().stream()
+                .sorted(Comparator.comparing(Country::getEn))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -50,5 +54,10 @@ public class CountryServiceImpl implements CountryService {
                         target.equalsIgnoreCase(country.getCz())
                 )
                 .findFirst();
+    }
+
+    @Override
+    public List<Country> getAllSortedCountries() {
+        return countries;
     }
 }

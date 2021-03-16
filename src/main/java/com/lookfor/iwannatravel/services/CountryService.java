@@ -23,4 +23,11 @@ public interface CountryService {
      * @return Country
      */
     Optional<Country> findCountryByName(String name);
+
+    /**
+     * Get all countries (sorted by en name)
+     *
+     * @return list of countries
+     */
+    List<Country> getAllSortedCountries();
 }

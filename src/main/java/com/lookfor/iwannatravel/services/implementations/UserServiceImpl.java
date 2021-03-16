@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -122,6 +123,7 @@ public class UserServiceImpl implements UserService {
         User user = userOptional.get();
         return user.getTrajectories().stream()
                 .map(trajectory -> trajectory.getArrivalCountry().getEn())
+                .sorted()
                 .collect(Collectors.toList());
     }
 
