@@ -16,28 +16,26 @@ import java.util.List;
 @Component
 public class CountryButtonsDisplay {
     private final CountryService countryService;
-    private final int RANGE = 26;
-    private int firstCountryFromList = 0;
+    private final int RANGE_ROWS = 13;
+    private int firstRowNumberFromList = 0;
     private final String LEFT_CMD = "left";
     private final String RIGHT_CMD = "right";
+    private final List<List<InlineKeyboardButton>> fulRowList = new ArrayList<>();
 
-    private List<List<InlineKeyboardButton>> initKeyboard(int firstCountryNumber, int lastCountryNumber) {
+    private void initKeyboard(String command) {
         List<Country> countries = countryService.getAllSortedCountries();
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-
-        int i = firstCountryNumber;
-        while (i < lastCountryNumber) {
+        int i = 0;
+        while (i < countries.size()) {
             ArrayList<InlineKeyboardButton> buttonsInRow = new ArrayList<>();
             for (int j = 0; j < 2; j++) {
                 InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
                 inlineKeyboardButton.setText(countries.get(i).getEn());
-                inlineKeyboardButton.setCallbackData("from " + countries.get(i).getEn());
+                inlineKeyboardButton.setCallbackData(command + " " + countries.get(i).getEn());
                 buttonsInRow.add(inlineKeyboardButton);
                 i++;
             }
-            rowList.add(buttonsInRow);
+            fulRowList.add(buttonsInRow);
         }
-        return rowList;
     }
 
     private List<InlineKeyboardButton> getArrowButtons(String turnSide, boolean isLastList) {
@@ -66,9 +64,13 @@ public class CountryButtonsDisplay {
         return arrowButtons;
     }
 
-    public InlineKeyboardMarkup getInlineKeyBoardMarkup() {
-        List<List<InlineKeyboardButton>> rowList = initKeyboard(0, RANGE);
+    public InlineKeyboardMarkup getInlineKeyBoardMarkup(String command) {
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        initKeyboard(command);
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        for (int i = 0; i < RANGE_ROWS; i++) {
+            rowList.add(fulRowList.get(i));
+        }
         inlineKeyboardMarkup.setKeyboard(rowList);
 
         rowList.add(getArrowButtons(LEFT_CMD, true));
@@ -76,15 +78,18 @@ public class CountryButtonsDisplay {
     }
 
     public InlineKeyboardMarkup scrollTo(String turnSide) {
+        int FULL_ROW_LIST_SIZE = fulRowList.size();
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        int COUNTRIES_SIZE = 234;
-        if (turnSide.equals(RIGHT_CMD) && firstCountryFromList < COUNTRIES_SIZE - RANGE) {
-            firstCountryFromList += RANGE;
-        } else if (turnSide.equals(LEFT_CMD) && firstCountryFromList > 0) {
-            firstCountryFromList -= RANGE;
+        if (turnSide.equals(RIGHT_CMD) && firstRowNumberFromList < FULL_ROW_LIST_SIZE - RANGE_ROWS) {
+            firstRowNumberFromList += RANGE_ROWS;
+        } else if (turnSide.equals(LEFT_CMD) && firstRowNumberFromList > 0) {
+            firstRowNumberFromList -= RANGE_ROWS;
         }
-        List<List<InlineKeyboardButton>> rowList = initKeyboard(firstCountryFromList, firstCountryFromList + RANGE);
-        if (firstCountryFromList <= 0 || firstCountryFromList >= COUNTRIES_SIZE - RANGE) {
+        for (int i = firstRowNumberFromList; i < firstRowNumberFromList + RANGE_ROWS; i++) {
+            rowList.add(fulRowList.get(i));
+        }
+        if (firstRowNumberFromList <= 0 || firstRowNumberFromList >= FULL_ROW_LIST_SIZE - RANGE_ROWS) {
             rowList.add(getArrowButtons(turnSide, true));
         } else {
             rowList.add(getArrowButtons(turnSide, false));

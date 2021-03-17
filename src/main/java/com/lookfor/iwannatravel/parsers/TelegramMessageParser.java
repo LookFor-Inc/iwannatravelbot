@@ -11,8 +11,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import static com.lookfor.iwannatravel.utils.TextMessageUtil.getRestOfTextMessageWithoutCommand;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,21 +38,18 @@ public class TelegramMessageParser extends Thread {
             return;
         }
 
-        if (update.hasCallbackQuery()) {
-            if (update.getCallbackQuery().getData().equals("right") ||
-                    update.getCallbackQuery().getData().equals("left")) {
-                EditMessageText editButtonsReplyMarkup = new EditMessageText();
-                editButtonsReplyMarkup.setChatId(String.valueOf(message.getChatId()));
-                editButtonsReplyMarkup.setMessageId(message.getMessageId());
-                InlineKeyboardMarkup markup = appContext.getBean(CountryButtonsDisplay.class).scrollTo(update.getCallbackQuery().getData());
-                editButtonsReplyMarkup.setReplyMarkup(markup);
-                editButtonsReplyMarkup.setText(message.getText());
-
-                try {
-                    telegramBot.execute(editButtonsReplyMarkup);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
+        if (update.hasCallbackQuery() &&
+                (update.getCallbackQuery().getData().equals("right") ||
+                update.getCallbackQuery().getData().equals("left"))) {
+            EditMessageText editButtonsReplyMarkup = new EditMessageText();
+            editButtonsReplyMarkup.setChatId(String.valueOf(message.getChatId()));
+            editButtonsReplyMarkup.setMessageId(message.getMessageId());
+            editButtonsReplyMarkup.setReplyMarkup(appContext.getBean(CountryButtonsDisplay.class).scrollTo(update.getCallbackQuery().getData()));
+            editButtonsReplyMarkup.setText(message.getText());
+            try {
+                telegramBot.execute(editButtonsReplyMarkup);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
             }
         } else {
             try {

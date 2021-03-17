@@ -34,7 +34,7 @@ public class UserCountryCommandHandler implements RootCommandHandler<SendMessage
         try {
             Integer userId = Math.toIntExact(update.hasCallbackQuery() ? message.getChat().getId() : message.getFrom().getId());
             if (restOfTextMessage.isEmpty()) {
-                sendMessage.setReplyMarkup(countryButtonsDisplay.getInlineKeyBoardMarkup());
+                sendMessage.setReplyMarkup(countryButtonsDisplay.getInlineKeyBoardMarkup("from"));
                 sbResponse.append(String.format("You are from *%s*🥳\n", userService.getUserDepartureCountryName(userId)));
             } else {
                 userService.saveUserDepartureCountry(userId, restOfTextMessage);
