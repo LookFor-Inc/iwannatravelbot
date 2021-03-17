@@ -23,6 +23,7 @@ public class CountryButtonsDisplay {
     private final List<List<InlineKeyboardButton>> fulRowList = new ArrayList<>();
 
     private void initKeyboard(String command) {
+        fulRowList.clear();
         List<Country> countries = countryService.getAllSortedCountries();
         int i = 0;
         while (i < countries.size()) {
@@ -65,8 +66,8 @@ public class CountryButtonsDisplay {
     }
 
     public InlineKeyboardMarkup getInlineKeyBoardMarkup(String command) {
-        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         initKeyboard(command);
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         for (int i = 0; i < RANGE_ROWS; i++) {
             rowList.add(fulRowList.get(i));

@@ -1,5 +1,6 @@
 package com.lookfor.iwannatravel.bot.handlers;
 
+import com.lookfor.iwannatravel.bot.CountryButtonsDisplay;
 import com.lookfor.iwannatravel.interfaces.RootCommandHandler;
 import com.lookfor.iwannatravel.services.ParseScheduler;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +21,20 @@ import static com.lookfor.iwannatravel.utils.TextMessageUtil.getRestOfTextMessag
 @RequiredArgsConstructor
 public class CountryInfoCommandHandler implements RootCommandHandler<SendMessage> {
     private final ParseScheduler parseScheduler;
+    private final CountryButtonsDisplay countryButtonsDisplay;
 
     @Override
     public SendMessage doParse(Update update) throws ExecutionException, InterruptedException, TelegramApiException {
         Message message = getReceivedMessage(update);
-        int userId = message.getFrom().getId();
-        String restOfTextMessage = getRestOfTextMessageWithoutCommand(message.getText());
+        int userId = Math.toIntExact(update.hasCallbackQuery() ? message.getChat().getId() : message.getFrom().getId());
+        String textMessage = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : message.getText();
+        String restOfTextMessage = getRestOfTextMessageWithoutCommand(textMessage);
 
         if (restOfTextMessage.isEmpty()) {
             return SendMessage.builder()
                     .chatId(String.valueOf(message.getChatId()))
                     .parseMode(ParseMode.MARKDOWN)
-                    // TODO
+                    .replyMarkup(countryButtonsDisplay.getInlineKeyBoardMarkup("info"))
                     .text("‼️*Empty country*‼️")
                     .build();
         }
