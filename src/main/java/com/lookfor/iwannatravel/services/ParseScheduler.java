@@ -2,12 +2,15 @@ package com.lookfor.iwannatravel.services;
 
 import com.lookfor.iwannatravel.bot.messages.StatusChangeMessages;
 import com.lookfor.iwannatravel.dto.AvailableCrossingResponse;
+import com.lookfor.iwannatravel.dto.ConcreteCountryResponse;
 import com.lookfor.iwannatravel.dto.CountryRequest;
 import com.lookfor.iwannatravel.dto.CountryStatus;
 import com.lookfor.iwannatravel.interfaces.AvailableCrossingParser;
+import com.lookfor.iwannatravel.interfaces.CountryParser;
 import com.lookfor.iwannatravel.interfaces.MessageSender;
 import com.lookfor.iwannatravel.models.Country;
 import com.lookfor.iwannatravel.models.Trajectory;
+import com.lookfor.iwannatravel.utils.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jmx.export.annotation.ManagedOperation;
@@ -26,7 +29,8 @@ import java.util.concurrent.Future;
 @RequiredArgsConstructor
 @ManagedResource(objectName = "ParseMBeans:category=MBeans,name=ParseScheduler")
 public class ParseScheduler {
-    private final AvailableCrossingParser parser;
+    private final AvailableCrossingParser crossingParser;
+    private final CountryParser countryParser;
     private final CountryService countryService;
     private final TrajectoryService trajectoryService;
     private final MessageSender messageSender;
@@ -75,7 +79,7 @@ public class ParseScheduler {
 
     private void startParser(String countryName, List<Trajectory> trajectoryList) throws ExecutionException, InterruptedException, TelegramApiException {
         log.info("Checking update for {}", countryName);
-        Future<AvailableCrossingResponse> future = parser.getResult(new CountryRequest(countryName));
+        Future<AvailableCrossingResponse> future = crossingParser.getResult(new CountryRequest(countryName));
         AvailableCrossingResponse response = future.get();
 
         List<CountryStatus> countryStatusList = response.getCountryStatusList();
@@ -102,13 +106,38 @@ public class ParseScheduler {
                     messageSender.sendToUsers(usersIds, message);
                 }
             } else { // restricted
-                log.info("Insert restriction info for {} -> {}", countryName, arrivalCountryName);
-                trajectory.setRestricted(true);
-                trajectory.setNote("The country is closed for tourism");
-                trajectoryService.save(trajectory);
+                if (!trajectory.isRestricted()) {
+                    log.info("Insert restriction info for {} -> {}", countryName, arrivalCountryName);
+                    trajectory.setRestricted(true);
+                    trajectory.setNote("The country is closed for tourism");
+                    trajectoryService.save(trajectory);
 
-                messageSender.sendToUsers(usersIds, StatusChangeMessages.getRestrictionsMessage(countryName));
+                    messageSender.sendToUsers(usersIds, StatusChangeMessages.getRestrictionsMessage(arrivalCountryName));
+                }
             }
         }
+    }
+
+    @Async
+    public void sendInfoAboutCountry(int userId, String countryName) throws TelegramApiException, ExecutionException, InterruptedException {
+        Optional<Country> countryOptional = countryService.findCountryByName(countryName);
+
+        if (countryOptional.isEmpty()) {
+            messageSender.sendToUser(userId, String.format("‼️*Country %s does not exist*‼️", countryName));
+            return;
+        }
+
+        Country country = countryOptional.get();
+        Future<ConcreteCountryResponse> future = countryParser.getResult(new CountryRequest(country.getEn()));
+        ConcreteCountryResponse response = future.get();
+
+        StringBuilder sbResponse = new StringBuilder()
+                .append(String.format("Information about: *%s*\n\n", response.getCountryName()))
+                .append(String.format("🗓*Last update*: %s\n\n", DateUtil.dateToString(response.getLastUpdate())))
+                .append(String.format("🚶*Open for citizens*: %s\n\n", response.getCitizens()))
+                .append(String.format("🎩*Open for foreigners*: %s\n\n", response.getForeigners()))
+                .append(String.format("🏝*Open for tourism*: %s\n\n", response.getTourism()))
+                .append(String.format("☣️*Quarantine*: %s\n\n", response.getTourism()));
+        messageSender.sendToUser(userId, sbResponse.toString());
     }
 }

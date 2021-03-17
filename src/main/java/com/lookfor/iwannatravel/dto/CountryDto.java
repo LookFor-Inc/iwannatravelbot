@@ -1,6 +1,5 @@
 package com.lookfor.iwannatravel.dto;
 
-import com.lookfor.iwannatravel.models.Country;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

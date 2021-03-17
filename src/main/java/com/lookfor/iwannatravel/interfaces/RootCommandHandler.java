@@ -3,6 +3,9 @@ package com.lookfor.iwannatravel.interfaces;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Parent (root) handler interface
@@ -16,7 +19,7 @@ public interface RootCommandHandler<T extends PartialBotApiMethod<?>> {
      * @param update received updates
      * @return bot api method
      */
-    T doParse(Update update);
+    T doParse(Update update) throws ExecutionException, InterruptedException, TelegramApiException;
 
     /**
      * Get entire user's message

@@ -24,10 +24,4 @@ public class ConcreteCountryResponse {
     private AllowStatus tourism;
     @NotNull
     private AllowStatus quarantine;
-
-    private String crossingRules;
-
-    private String flightRestrictions;
-
-    private String quarantineNote;
 }
