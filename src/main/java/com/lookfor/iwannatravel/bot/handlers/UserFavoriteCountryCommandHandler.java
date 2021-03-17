@@ -1,5 +1,6 @@
 package com.lookfor.iwannatravel.bot.handlers;
 
+import com.lookfor.iwannatravel.bot.CountryButtonsDisplay;
 import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
 import com.lookfor.iwannatravel.exceptions.IncorrectRequestException;
 import com.lookfor.iwannatravel.exceptions.UserNotFoundException;
@@ -30,23 +31,26 @@ public class UserFavoriteCountryCommandHandler implements RootCommandHandler<Sen
     private final UserService userService;
     private final ParseScheduler parseScheduler;
     private final CountryService countryService;
+    private final CountryButtonsDisplay countryButtonsDisplay;
 
     @Override
     public SendMessage doParse(Update update) {
         Message message = getReceivedMessage(update);
-        int userId = message.getFrom().getId();
-        String restOfTextMessage = getRestOfTextMessageWithoutCommand(message.getText());
+        int userId = Math.toIntExact(update.hasCallbackQuery() ? message.getChat().getId() : message.getFrom().getId());
+        String textMessage = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : message.getText();
+        String restOfTextMessage = getRestOfTextMessageWithoutCommand(textMessage);
         StringBuilder sbResponse = new StringBuilder();
 
+        SendMessage sendMessage = new SendMessage();
         try {
             if (restOfTextMessage.isEmpty()) {
                 List<Country> countries = countryService.getAllSortedCountries();
-                // TODO: send countries to keyboard
+                sendMessage.setReplyMarkup(countryButtonsDisplay.getInlineKeyBoardMarkup("to"));
                 for (int i = 0; i < 10; i++) {
                     sbResponse.append(countries.get(i).getEn()).append("\n");
                 }
             } else {
-                userService.saveUserArrivalCountry(message.getFrom().getId(), restOfTextMessage);
+                userService.saveUserArrivalCountry(userId, restOfTextMessage);
                 sbResponse.append("Country was added to your favorites!👌\n");
                 parseScheduler.startParserWithChecks(userId, userService.getUserDepartureCountryName(userId), restOfTextMessage);
             }
@@ -56,10 +60,10 @@ public class UserFavoriteCountryCommandHandler implements RootCommandHandler<Sen
         }
 
         sbResponse.append("\n👀*View* all your favorite countries using command */favorites*\n");
-        return SendMessage.builder()
-                .chatId(String.valueOf(message.getChatId()))
-                .parseMode(ParseMode.MARKDOWN)
-                .text(sbResponse.toString())
-                .build();
+
+        sendMessage.setChatId((String.valueOf(message.getChatId())));
+        sendMessage.setParseMode(ParseMode.MARKDOWN);
+        sendMessage.setText(sbResponse.toString());
+        return sendMessage;
     }
 }

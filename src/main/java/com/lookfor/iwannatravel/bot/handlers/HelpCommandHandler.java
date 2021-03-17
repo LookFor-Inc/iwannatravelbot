@@ -23,6 +23,7 @@ public class HelpCommandHandler implements RootCommandHandler<SendMessage> {
                         /help - 🆘
                         /from - 🛫
                         /to - 🛬
+                        /info - ℹ️
                         /favorites - ⭐️
                         /remove - ❌
                         """

@@ -42,11 +42,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         boolean editedMessage = update.hasEditedMessage();
-        if (!update.hasMessage() && !editedMessage) {
+        if (!update.hasMessage() && !editedMessage && !update.hasCallbackQuery()) {
             return;
         }
-        Message message = editedMessage ? update.getEditedMessage() : update.getMessage();
-        String messageText = message.getText();
+        Message message = editedMessage ?
+                update.getEditedMessage() : update.hasCallbackQuery() ?
+                update.getCallbackQuery().getMessage() : update.getMessage();
+        String messageText = update.hasCallbackQuery() ? update.getCallbackQuery().getData() : message.getText();
 
         if (messageText.isEmpty()) {
             return;
@@ -64,7 +66,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         TelegramMessageParser parser =
-                new TelegramMessageParser(this, update, handler);
+                new TelegramMessageParser(this, update, handler, appContext);
 
         // Start thread for parsing sent message
         parser.start();
