@@ -18,7 +18,7 @@ public class GreetingCommandHandler implements RootCommandHandler<SendMessage> {
                 .text(
                         String.format(
                                 "Hello, %s! I am *I Wanna Travel Bot*!🤖\n\n", message.getFrom().getUserName())
-                                + "I can help you to keep yourself up-to-date about travel restrictions on your favorite"
+                                + "I can help you to keep yourself up-to-date about travel restrictions on your favorite "
                                 + "destination country notifying you of any new updates on travel restrictions that are being released💪🏼")
                 .build();
     }

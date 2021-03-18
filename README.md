@@ -41,6 +41,7 @@ The Bot can:
 - Spring Data JPA
 - PostgreSQL
 - Liquibase
+- Jsoup
 - Lombok
 - Maven
 
