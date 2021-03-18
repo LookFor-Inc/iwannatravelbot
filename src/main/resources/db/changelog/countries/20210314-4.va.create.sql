@@ -21,4 +21,4 @@ create table countries(
     constraint countries_pkey primary key (id)
 );
 
---rollback DROP TABLE other_market_participants;
+--rollback DROP TABLE countries;

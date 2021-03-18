@@ -5,8 +5,6 @@ import com.lookfor.iwannatravel.exceptions.CountryNotFoundException;
 import com.lookfor.iwannatravel.exceptions.IncorrectRequestException;
 import com.lookfor.iwannatravel.exceptions.UserNotFoundException;
 import com.lookfor.iwannatravel.interfaces.RootCommandHandler;
-import com.lookfor.iwannatravel.models.Country;
-import com.lookfor.iwannatravel.services.CountryService;
 import com.lookfor.iwannatravel.services.ParseScheduler;
 import com.lookfor.iwannatravel.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +18,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.concurrent.ExecutionException;
 
-import java.util.List;
-
 import static com.lookfor.iwannatravel.utils.TextMessageUtil.getRestOfTextMessageWithoutCommand;
 
 @Slf4j
@@ -30,7 +26,6 @@ import static com.lookfor.iwannatravel.utils.TextMessageUtil.getRestOfTextMessag
 public class UserFavoriteCountryCommandHandler implements RootCommandHandler<SendMessage> {
     private final UserService userService;
     private final ParseScheduler parseScheduler;
-    private final CountryService countryService;
     private final CountryButtonsDisplay countryButtonsDisplay;
 
     @Override
@@ -44,11 +39,7 @@ public class UserFavoriteCountryCommandHandler implements RootCommandHandler<Sen
         SendMessage sendMessage = new SendMessage();
         try {
             if (restOfTextMessage.isEmpty()) {
-                List<Country> countries = countryService.getAllSortedCountries();
                 sendMessage.setReplyMarkup(countryButtonsDisplay.getInlineKeyBoardMarkup("to"));
-                for (int i = 0; i < 10; i++) {
-                    sbResponse.append(countries.get(i).getEn()).append("\n");
-                }
             } else {
                 userService.saveUserArrivalCountry(userId, restOfTextMessage);
                 sbResponse.append("Country was added to your favorites!👌\n");

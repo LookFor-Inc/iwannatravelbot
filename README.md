@@ -41,10 +41,15 @@ The Bot can:
 - Spring Data JPA
 - PostgreSQL
 - Liquibase
+- Jsoup
 - Lombok
 - Maven
 
 ## Deploying
+
+### Deploy on [Heroku](https://heroku.com)
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## Configuration
 
@@ -53,10 +58,12 @@ To set up a configuration you have to add values to Environment variables.
 ### Configuration Values
 
 - `TELEGRAM_BOT_USERNAME` - Create a bot via [BotFather](https://t.me/botfather)
-- `TELEGRAM_BOT_TOKEN` - Get token by contacting to [BotFather](https://t.me/botfather)
+- `TELEGRAM_BOT_TOKEN` - Get token by contacting
+  to [BotFather](https://t.me/botfather)
 - `SPRING_DATASOURCE_URL` - Postgres database url
 - `SPRING_DATASOURCE_USERNAME` - Postgres database username
 - `SPRING_DATASOURCE_PASSWORD` - Postgres database password
 
 ## Copyright
+
 Copyright © 2021 by [LookFor Inc](https://github.com/LookFor-Inc)
